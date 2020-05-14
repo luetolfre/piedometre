@@ -1,0 +1,2 @@
+rootProject.name='piedometre'
+include ':app'
