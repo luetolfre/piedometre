@@ -4,4 +4,70 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"/>
+    android:visibility="invisible"
+    tools:context=".MainActivity">
+
+    <ProgressBar
+        android:id="@+id/progressBarStats2"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="157dp"
+        android:layout_height="152dp"
+        tools:layout_editor_absoluteX="31dp"
+        tools:layout_editor_absoluteY="520dp" />
+
+    <Button
+        android:id="@+id/button6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        tools:layout_editor_absoluteX="68dp"
+        tools:layout_editor_absoluteY="576dp" />
+
+    <ProgressBar
+        android:id="@+id/progressBarSteps"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="157dp"
+        android:layout_height="152dp"
+        tools:layout_editor_absoluteX="238dp"
+        tools:layout_editor_absoluteY="41dp" />
+
+    <Button
+        android:id="@+id/buttonSteps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Steps"
+        tools:layout_editor_absoluteX="274dp"
+        tools:layout_editor_absoluteY="97dp" />
+
+    <ProgressBar
+        android:id="@+id/progressBarTraining"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="157dp"
+        android:layout_height="152dp"
+        tools:layout_editor_absoluteX="31dp"
+        tools:layout_editor_absoluteY="210dp" />
+
+    <Button
+        android:id="@+id/buttonTraining"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Training"
+        tools:layout_editor_absoluteX="64dp"
+        tools:layout_editor_absoluteY="263dp" />
+
+    <ProgressBar
+        android:id="@+id/progressBarStats"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="157dp"
+        android:layout_height="152dp"
+        tools:layout_editor_absoluteX="238dp"
+        tools:layout_editor_absoluteY="368dp" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        tools:layout_editor_absoluteX="275dp"
+        tools:layout_editor_absoluteY="424dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>
