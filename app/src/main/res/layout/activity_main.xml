@@ -1,73 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="invisible"
+    android:visibility="visible"
     tools:context=".MainActivity">
 
+    <!--
     <ProgressBar
-        android:id="@+id/progressBarStats2"
+        android:id="@+id/progressBarTraining"
         style="?android:attr/progressBarStyle"
-        android:layout_width="157dp"
-        android:layout_height="152dp"
-        tools:layout_editor_absoluteX="31dp"
-        tools:layout_editor_absoluteY="520dp" />
+        android:indeterminateDuration="0"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="196dp"
+        android:progressTint="@color/colorPrimaryDark"
+        android:visibility="visible"
+        android:indeterminate="false"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.135"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBarStats"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:visibility="visible"
+        android:progressTint="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.844"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progressBarSteps"
+        app:layout_constraintVertical_bias="0.426" />
 
     <Button
         android:id="@+id/button6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="68dp"
-        tools:layout_editor_absoluteY="576dp" />
+        android:backgroundTint="#FFFFFF"
+        android:text="ButtonBottom"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBarStats2"
+        app:layout_constraintEnd_toEndOf="@+id/progressBarStats2"
+        app:layout_constraintStart_toStartOf="@+id/progressBarStats2"
+        app:layout_constraintTop_toTopOf="@+id/progressBarStats2" />
 
     <ProgressBar
-        android:id="@+id/progressBarSteps"
+        android:id="@+id/progressBarStats2"
         style="?android:attr/progressBarStyle"
-        android:layout_width="157dp"
-        android:layout_height="152dp"
-        tools:layout_editor_absoluteX="238dp"
-        tools:layout_editor_absoluteY="41dp" />
-
-    <Button
-        android:id="@+id/buttonSteps"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Steps"
-        tools:layout_editor_absoluteX="274dp"
-        tools:layout_editor_absoluteY="97dp" />
-
-    <ProgressBar
-        android:id="@+id/progressBarTraining"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="157dp"
-        android:layout_height="152dp"
-        tools:layout_editor_absoluteX="31dp"
-        tools:layout_editor_absoluteY="210dp" />
-
-    <Button
-        android:id="@+id/buttonTraining"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Training"
-        tools:layout_editor_absoluteX="64dp"
-        tools:layout_editor_absoluteY="263dp" />
-
-    <ProgressBar
-        android:id="@+id/progressBarStats"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="157dp"
-        android:layout_height="152dp"
-        tools:layout_editor_absoluteX="238dp"
-        tools:layout_editor_absoluteY="368dp" />
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:progressTint="@color/colorPrimaryDark"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.135"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progressBarTraining"
+        app:layout_constraintVertical_bias="0.744" />
 
     <Button
         android:id="@+id/button5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="#FFFFFF"
         android:text="Button"
-        tools:layout_editor_absoluteX="275dp"
-        tools:layout_editor_absoluteY="424dp" />
+        app:layout_constraintBottom_toBottomOf="@+id/progressBarStats"
+        app:layout_constraintEnd_toEndOf="@+id/progressBarStats"
+        app:layout_constraintStart_toStartOf="@+id/progressBarStats"
+        app:layout_constraintTop_toTopOf="@+id/progressBarStats" />
+
+    <ProgressBar
+        android:id="@+id/progressBarSteps"
+        style="?android:attr/progressBarStyleLarge"
+        android:indeterminate="true"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="36dp"
+        android:progressTint="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.844"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonSteps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FFFFFF"
+        android:text="Steps"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBarSteps"
+        app:layout_constraintEnd_toEndOf="@+id/progressBarSteps"
+        app:layout_constraintStart_toStartOf="@+id/progressBarSteps"
+        app:layout_constraintTop_toTopOf="@+id/progressBarSteps" />
+
+    <Button
+        android:id="@+id/buttonTraining"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FFFFFF"
+        android:text="Training"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBarTraining"
+        app:layout_constraintEnd_toEndOf="@+id/progressBarTraining"
+        app:layout_constraintStart_toStartOf="@+id/progressBarTraining"
+        app:layout_constraintTop_toTopOf="@+id/progressBarTraining"
+        app:layout_constraintVertical_bias="0.544" />
+
+        -->
+
+
+    <ProgressBar
+        android:id="@+id/progressbarSteps"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="230dp"
+        android:layout_height="230dp"
+        android:indeterminate="false"
+        android:max="150"
+        android:progress="100"
+        android:progressDrawable="@drawable/custom_progress"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.869"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.05"
+        tools:ignore="MissingConstraints" />
+
+    <ProgressBar
+        android:id="@+id/progressbarTraining"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="16dp"
+        android:indeterminate="false"
+        android:max="150"
+        android:progress="100"
+        android:progressDrawable="@drawable/custom_progress"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.384"
+        tools:ignore="MissingConstraints" />
+
+    <ProgressBar
+        android:id="@+id/progressbarTraining2"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:indeterminate="false"
+        android:max="150"
+        android:progress="100"
+        android:progressDrawable="@drawable/custom_progress"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.748"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.651"
+        tools:ignore="MissingConstraints" />
+
+    <ProgressBar
+        android:id="@+id/progressbarTraining3"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:indeterminate="false"
+        android:max="150"
+        android:progress="100"
+        android:progressDrawable="@drawable/custom_progress"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.191"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.893"
+        tools:ignore="MissingConstraints" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
