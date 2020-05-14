@@ -3,4 +3,8 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="colorProgressSteps">#18A30E</color>
+    <color name="colorProgressTraining">#3700B3</color>
+    <color name="colorProgressSpeed">#F11F1F</color>
+    <color name="colorProgressStats">#F6EF1E</color>
 </resources>
