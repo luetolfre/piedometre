@@ -3,4 +3,163 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView android:id="@+id/textViewTrainingTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/training"
+        android:textSize="32sp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/progressBarTrainingType"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView android:id="@+id/textViewTrainingTypeDescription"
+        android:layout_width="59dp"
+        android:layout_height="26dp"
+        android:text="@string/type"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBarTrainingType"
+        app:layout_constraintEnd_toEndOf="@+id/progressBarTrainingType"
+        app:layout_constraintStart_toStartOf="@+id/progressBarTrainingType"
+        app:layout_constraintTop_toTopOf="@+id/progressBarTrainingType"
+        app:layout_constraintVertical_bias="0.25" />
+
+    <TextView
+        android:id="@+id/textViewTrainingTypeToggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/training"
+        android:textAlignment="center"
+        android:textColor="@android:color/primary_text_light"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBarTrainingType"
+        app:layout_constraintEnd_toEndOf="@+id/progressBarTrainingType"
+        app:layout_constraintStart_toStartOf="@+id/progressBarTrainingType"
+        app:layout_constraintTop_toTopOf="@+id/progressBarTrainingType" />
+
+    <ProgressBar android:id="@+id/progressBarTrainingType"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:indeterminate="false"
+        android:max="150"
+        android:progress="150"
+        android:progressDrawable="@drawable/custom_progress"
+        android:progressTint="@color/gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.717"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.126" />
+
+
+    <TextView android:id="@+id/textViewTrainingSpeedDescription"
+        android:layout_width="59dp"
+        android:layout_height="26dp"
+        android:text="@string/speed"
+        android:textSize="16sp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBarTrainingSpeed"
+        app:layout_constraintEnd_toEndOf="@+id/progressBarTrainingSpeed"
+        app:layout_constraintStart_toStartOf="@+id/progressBarTrainingSpeed"
+        app:layout_constraintTop_toTopOf="@+id/progressBarTrainingSpeed"
+        app:layout_constraintVertical_bias="0.25" />
+
+    <TextView android:id="@+id/textViewTrainingSpeedNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/start_speed_0"
+        android:textAlignment="center"
+        android:textColor="@android:color/primary_text_light"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBarTrainingSpeed"
+        app:layout_constraintEnd_toEndOf="@+id/progressBarTrainingSpeed"
+        app:layout_constraintStart_toStartOf="@+id/progressBarTrainingSpeed"
+        app:layout_constraintTop_toTopOf="@+id/progressBarTrainingSpeed" />
+
+    <TextView android:id="@+id/textViewMeasuringUnitSpeedDescription"
+        android:layout_width="59dp"
+        android:layout_height="26dp"
+        android:text="@string/km_h"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBarTrainingSpeed"
+        app:layout_constraintEnd_toEndOf="@+id/progressBarTrainingSpeed"
+        app:layout_constraintStart_toStartOf="@+id/progressBarTrainingSpeed"
+        app:layout_constraintTop_toTopOf="@+id/progressBarTrainingSpeed"
+        app:layout_constraintVertical_bias="0.75" />
+
+    <ProgressBar android:id="@+id/progressBarTrainingSpeed"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:indeterminate="false"
+        android:max="150"
+        android:progress="150"
+        android:progressDrawable="@drawable/custom_progress"
+        android:progressTint="@color/gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.286"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.422" />
+
+
+    <TextView android:id="@+id/textViewTrainingTimeDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/time"
+        android:textSize="16sp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBarTrainingTime"
+        app:layout_constraintEnd_toEndOf="@+id/progressBarTrainingTime"
+        app:layout_constraintStart_toStartOf="@+id/progressBarTrainingTime"
+        app:layout_constraintTop_toTopOf="@+id/progressBarTrainingTime"
+        app:layout_constraintVertical_bias="0.25" />
+
+    <TextView android:id="@+id/textViewTrainingTimeNumber"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/start_time_00"
+    android:textSize="24sp"
+    android:textAlignment="center"
+    android:textColor="@android:color/primary_text_light"
+    app:layout_constraintBottom_toBottomOf="@+id/progressBarTrainingTime"
+    app:layout_constraintEnd_toEndOf="@+id/progressBarTrainingTime"
+    app:layout_constraintStart_toStartOf="@+id/progressBarTrainingTime"
+    app:layout_constraintTop_toTopOf="@+id/progressBarTrainingTime" />
+
+    <ProgressBar android:id="@+id/progressBarTrainingTime"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:indeterminate="false"
+        android:max="150"
+        android:progress="150"
+        android:progressDrawable="@drawable/custom_progress"
+        android:progressTint="@color/gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.717"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.714" />
+
+
+    <Button android:id="@+id/buttonStartTraining"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:text="@string/start_training"
+        android:backgroundTintMode="multiply"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTrainingTitle"
+        app:layout_constraintVertical_bias="0.90" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
