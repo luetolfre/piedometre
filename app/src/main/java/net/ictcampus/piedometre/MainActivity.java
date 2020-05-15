@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void startTrainingActivity(View view) {
         //bla
+        System.out.println("hfossdfa");
         Intent training = new Intent(getApplicationContext(), TrainingActivity.class);
         startActivity(training);
     }
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void startStatsActivity(View view) {
         //bla
+        Toast.makeText(this, "Hello from the other Side", Toast.LENGTH_SHORT).show();
         Intent stats = new Intent(getApplicationContext(), StatsActivity.class);
         startActivity(stats);
     }
