@@ -11,4 +11,5 @@
     <color name="colorMeasuringValues">#000000</color>
     <color name="colorBackground">#000000</color>
     <color name="colorForeground">#F0F0F0</color>
+    <color name="gray">#555555</color>
 </resources>
