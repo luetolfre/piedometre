@@ -2,21 +2,13 @@ package net.ictcampus.piedometre;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.CompoundButton;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.Toast;
-import android.widget.ToggleButton;
-
-import java.util.EventListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,12 +16,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ckeckListener();
+        switchListenerDarkLightMode();
 
     }
 
 
-    public void ckeckListener() {
+    /**
+     * Add Listener to the SwitchButton to change Dark/Light Mode
+     */
+    private void switchListenerDarkLightMode() {
         Switch switchDark = findViewById(R.id.switchDark);
         switchDark.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -42,54 +37,38 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public ProgressBar getProgressBarSteps() {
-        ProgressBar progressBarSteps = findViewById(R.id.progressbarSteps);
-        return progressBarSteps;
-    }
 
-    public void onClick(View view) {
+    public void onTestClick(View view) {
         System.out.println("clikc");
     }
 
     /**
      * Start of Trainig Activity
-     * @param view
+     * @param view of the TrainingButton
      */
-
     public void startTrainingActivity(View view) {
-        //bla
-        System.out.println("hfossdfa");
         Intent training = new Intent(getApplicationContext(), TrainingActivity.class);
+        Toast.makeText(getApplicationContext(), "training", Toast.LENGTH_SHORT).show();
         startActivity(training);
     }
 
     /**
      * Start of Stats Activity
-     * @param view
+     * @param view of the StatsButton
      */
     public void startStatsActivity(View view) {
-        //bla
-        Toast.makeText(this, "Hello from the other Side", Toast.LENGTH_SHORT).show();
         Intent stats = new Intent(getApplicationContext(), StatsActivity.class);
+        Toast.makeText(getApplicationContext(), "stats", Toast.LENGTH_SHORT).show();
         startActivity(stats);
     }
 
-
-
-
-    /*
-    private void setOnItemListener(ProgressBar progressBar) {
-        AdapterView.OnItemClickListener onListClickListener = new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), .class);
-                String selected = parent.getItemAtPosition(position).toString();
-                Toast.makeText(getApplicationContext(), selected, Toast.LENGTH_SHORT).show();
-                intent.putExtra("kanton", selected);
-                startActivity(intent);
-            }
-        };
-
-        progressBar.setOnItemClickListener(onListClickListener);
-    }*/
+    /**
+     * Start the StepsActivity
+     * @param view of the StepsButton
+     */
+    public void startStepsActivity(View view) {
+        Intent stats = new Intent(getApplicationContext(), StepsActivity.class);
+        Toast.makeText(getApplicationContext(), "steps", Toast.LENGTH_SHORT).show();
+        startActivity(stats);
+    }
 }
