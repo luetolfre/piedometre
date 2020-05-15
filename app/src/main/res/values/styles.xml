@@ -2,16 +2,20 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorBackground</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="progressBarStepsColor">
-        <item name="android:color">@color/colorProgressSteps</item>
+    <!--
+    <style name="AppThemeDark" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorDescriptionTitle</item>
+        <item name="colorPrimaryDark">@color/colorMeasuringValues</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:text">@color/colorMeasuringValues</item>
+        <item name="android:textColorPrimaryInverse">@color/colorMeasuringValues</item>
+        <item name="colorOnBackground">@color/colorBackground</item>
     </style>
-
-
+    -->
 
 </resources>
