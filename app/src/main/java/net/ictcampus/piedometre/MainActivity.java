@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         switchListenerDarkLightMode();
-
     }
 
 
@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
 
     public void onTestClick(View view) {
@@ -67,8 +68,10 @@ public class MainActivity extends AppCompatActivity {
      * @param view of the StepsButton
      */
     public void startStepsActivity(View view) {
-        Intent stats = new Intent(getApplicationContext(), StepsActivity.class);
+        Intent steps = new Intent(getApplicationContext(), StepsActivity.class);
         Toast.makeText(getApplicationContext(), "steps", Toast.LENGTH_SHORT).show();
-        startActivity(stats);
+        startActivity(steps);
+
+
     }
 }

@@ -19,7 +19,6 @@ public class StepsActivity extends AppCompatActivity implements SensorEventListe
     private SensorManager mSensorManager;
     private Sensor mStepSensor;
     private TextView mTextView;
-    private SensorEventListener mSensorEventListener;
     private boolean sensoring = false;
 
     // Constant Value: 19 (0x00000013)
@@ -32,7 +31,7 @@ public class StepsActivity extends AppCompatActivity implements SensorEventListe
         mTextView = findViewById(R.id.textViewStepsActivity);
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         assert mSensorManager != null;
-        mStepSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+        mStepSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
         List<Sensor> liste = mSensorManager.getSensorList(Sensor.TYPE_ALL);
         for (Sensor s : liste) {
@@ -41,13 +40,19 @@ public class StepsActivity extends AppCompatActivity implements SensorEventListe
 
     }
 
+
+
     protected void onResume() {
         super.onResume();
         sensoring = true;
-        if (mStepSensor != null && mStepSensor.isWakeUpSensor()) {
-            mSensorManager.registerListener(mSensorEventListener, mStepSensor, SensorManager.SENSOR_DELAY_NORMAL);
-            Log.d("SensorReturn", String.valueOf(mSensorManager.registerListener(mSensorEventListener, mStepSensor, SensorManager.SENSOR_DELAY_NORMAL)));
+
+        if (mStepSensor != null) {
+            mSensorManager.registerListener(this, mStepSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            //boolean boo = mSensorManager.registerListener(this , mStepSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            //Log.v("SensorReturn", String.valueOf(boo));
             Log.v("hello", "Hello from the other side");
+            Sensor mySensor = mSensorManager.getDefaultSensor(19);
+            Log.v("SensorType", mySensor.toString());
 
         } else {
             Toast.makeText(this, "Sensor not found or not waken up", Toast.LENGTH_SHORT).show();
@@ -57,14 +62,13 @@ public class StepsActivity extends AppCompatActivity implements SensorEventListe
 
     protected void onPause() {
         super.onPause();
-        mSensorManager.unregisterListener(mSensorEventListener);
+        mSensorManager.unregisterListener(this);
         sensoring = false;
     }
 
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-
         System.out.println(event.values[0]);
         Log.v("hello", String.valueOf(event.values[0]));
         mTextView.setText(String.valueOf(event.values[0]));
