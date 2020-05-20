@@ -3,21 +3,37 @@ package net.ictcampus.piedometre;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SensorEventListener {
+
+    SensorManager mSensorManager;
+    Sensor myStepSensor;
+    TextView textViewSteps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         switchListenerDarkLightMode();
+
+        textViewSteps = findViewById(R.id.textViewCount);
+
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        assert mSensorManager != null;
+        myStepSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
     }
 
 
@@ -38,13 +54,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     public void onTestClick(View view) {
         System.out.println("clikc");
     }
 
     /**
      * Start of Trainig Activity
+     *
      * @param view of the TrainingButton
      */
     public void startTrainingActivity(View view) {
@@ -55,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Start of Stats Activity
+     *
      * @param view of the StatsButton
      */
     public void startStatsActivity(View view) {
@@ -65,13 +82,34 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Start the StepsActivity
+     *
      * @param view of the StepsButton
      */
     public void startStepsActivity(View view) {
-        Intent steps = new Intent(getApplicationContext(), StepsActivity.class);
+        Intent steps = new Intent(getApplicationContext(), StepsCounter.class);
         Toast.makeText(getApplicationContext(), "steps", Toast.LENGTH_SHORT).show();
-        startActivity(steps);
+        //startActivity(steps);
 
+
+    }
+
+    protected void onResume() {
+        super.onResume();
+
+        if (myStepSensor != null) {
+            mSensorManager.registerListener(this, myStepSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        System.out.println(event.values[0]);
+        Log.v("hello", String.valueOf(event.values[0]));
+        textViewSteps.setText(String.valueOf(event.values[0]));
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
 }

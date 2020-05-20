@@ -15,7 +15,7 @@ import android.widget.Toast;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class StepsActivity extends AppCompatActivity implements SensorEventListener {
+public class StepsCounter implements SensorEventListener {
     private SensorManager mSensorManager;
     private Sensor mStepSensor;
     private TextView mTextView;
@@ -23,6 +23,29 @@ public class StepsActivity extends AppCompatActivity implements SensorEventListe
 
     // Constant Value: 19 (0x00000013)
 
+    public StepsCounter(SensorManager sensorManager) {
+
+    }
+
+    public Sensor getStepCounterSensor() {
+        return mStepSensor;
+    }
+
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        System.out.println(event.values[0]);
+        Log.v("hello", String.valueOf(event.values[0]));
+        mTextView.setText(String.valueOf(event.values[0]));
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+
+    /*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,17 +88,7 @@ public class StepsActivity extends AppCompatActivity implements SensorEventListe
         mSensorManager.unregisterListener(this);
         sensoring = false;
     }
+    */
 
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        System.out.println(event.values[0]);
-        Log.v("hello", String.valueOf(event.values[0]));
-        mTextView.setText(String.valueOf(event.values[0]));
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
 }
