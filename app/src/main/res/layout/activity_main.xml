@@ -79,24 +79,6 @@
         />
 
 
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButtonSteps"
-        android:layout_width="157dp"
-        android:layout_height="157dp"
-        android:background="@android:color/transparent"
-        android:backgroundTint="@android:color/transparent"
-        android:onClick="startStepsActivity"
-        app:borderWidth="0dp"
-        app:elevation="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/progressbarSteps"
-        app:layout_constraintEnd_toEndOf="@+id/progressbarSteps"
-        app:layout_constraintHorizontal_bias="0.52"
-        app:layout_constraintStart_toStartOf="@+id/progressbarSteps"
-        app:layout_constraintTop_toTopOf="@+id/progressbarSteps"
-        app:layout_constraintVertical_bias="0.506"
-        app:srcCompat="@drawable/circle_shape" />
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButtonTraining"
         android:layout_width="136dp"
@@ -129,18 +111,35 @@
         app:layout_constraintTop_toTopOf="@+id/progressbarStats"
         app:srcCompat="@drawable/circle_shape" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButtonProfile"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:background="@android:color/transparent"
+        android:backgroundTint="@android:color/transparent"
+        android:onClick="startProfileActivity"
+        app:borderWidth="0dp"
+        app:elevation="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/progressbarSpeed"
+        app:layout_constraintEnd_toEndOf="@+id/progressbarSpeed"
+        app:layout_constraintHorizontal_bias="0.44"
+        app:layout_constraintStart_toStartOf="@+id/progressbarSpeed"
+        app:layout_constraintTop_toTopOf="@+id/progressbarSpeed"
+        app:layout_constraintVertical_bias="0.58"
+        app:srcCompat="@drawable/circle_shape" />
+
     <TextView
         android:id="@+id/textViewSteps"
         android:layout_width="59dp"
         android:layout_height="26dp"
         android:text="@string/steps"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/floatingActionButtonSteps"
-        app:layout_constraintEnd_toEndOf="@+id/floatingActionButtonSteps"
-        app:layout_constraintHorizontal_bias="0.515"
-        app:layout_constraintStart_toStartOf="@+id/floatingActionButtonSteps"
-        app:layout_constraintTop_toTopOf="@+id/floatingActionButtonSteps"
-        app:layout_constraintVertical_bias="0.684" />
+        app:layout_constraintBottom_toBottomOf="@+id/progressbarSteps"
+        app:layout_constraintEnd_toEndOf="@+id/progressbarSteps"
+        app:layout_constraintHorizontal_bias="0.473"
+        app:layout_constraintStart_toStartOf="@+id/progressbarSteps"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCount"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Switch
         android:id="@+id/switchDark"
@@ -148,7 +147,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="64dp"
         android:layout_marginBottom="60dp"
-        android:checked="false"
+        android:checked="true"
         android:showText="true"
         android:textOff="Light"
         android:textOn="Dark"
@@ -161,12 +160,37 @@
         android:layout_height="wrap_content"
         android:text="0"
         android:textSize="40sp"
-        app:layout_constraintBottom_toBottomOf="@+id/floatingActionButtonSteps"
-        app:layout_constraintEnd_toEndOf="@+id/floatingActionButtonSteps"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="@+id/floatingActionButtonSteps"
-        app:layout_constraintTop_toTopOf="@+id/floatingActionButtonSteps"
-        app:layout_constraintVertical_bias="0.349" />
+        app:layout_constraintBottom_toBottomOf="@+id/progressbarSteps"
+        app:layout_constraintEnd_toEndOf="@+id/progressbarSteps"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="@+id/progressbarSteps"
+        app:layout_constraintTop_toTopOf="@+id/progressbarSteps"
+        app:layout_constraintVertical_bias="0.386" />
+
+    <TextView
+        android:id="@+id/textViewProfileButton"
+        android:layout_width="49dp"
+        android:layout_height="20dp"
+        android:text="Profile"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/floatingActionButtonProfile"
+        app:layout_constraintEnd_toEndOf="@+id/floatingActionButtonProfile"
+        app:layout_constraintHorizontal_bias="0.59"
+        app:layout_constraintStart_toStartOf="@+id/floatingActionButtonProfile"
+        app:layout_constraintTop_toTopOf="@+id/floatingActionButtonProfile"
+        app:layout_constraintVertical_bias="0.777" />
+
+    <ImageView
+        android:id="@+id/imageViewProfileIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="@+id/floatingActionButtonProfile"
+        app:layout_constraintEnd_toEndOf="@+id/floatingActionButtonProfile"
+        app:layout_constraintHorizontal_bias="0.583"
+        app:layout_constraintStart_toStartOf="@+id/floatingActionButtonProfile"
+        app:layout_constraintTop_toTopOf="@+id/floatingActionButtonProfile"
+        app:layout_constraintVertical_bias="0.2"
+        app:srcCompat="@drawable/profile" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

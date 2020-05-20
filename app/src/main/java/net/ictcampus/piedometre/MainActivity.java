@@ -34,6 +34,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         assert mSensorManager != null;
         myStepSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+
+
+        if (myStepSensor != null) {
+            mSensorManager.registerListener(this, myStepSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 
 
@@ -81,35 +86,45 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     /**
-     * Start the StepsActivity
+     * Start the ProfileActivity
      *
-     * @param view of the StepsButton
+     * @param view of the ProfileButton
      */
-    public void startStepsActivity(View view) {
-        Intent steps = new Intent(getApplicationContext(), StepsCounter.class);
-        Toast.makeText(getApplicationContext(), "steps", Toast.LENGTH_SHORT).show();
-        //startActivity(steps);
-
+    public void startProfileActivity(View view) {
+        Intent profile = new Intent(getApplicationContext(), ProfileActivity.class);
+        Toast.makeText(getApplicationContext(), "Profile", Toast.LENGTH_SHORT).show();
+        startActivity(profile);
 
     }
 
-    protected void onResume() {
-        super.onResume();
-
-        if (myStepSensor != null) {
-            mSensorManager.registerListener(this, myStepSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        }
-    }
-
+    /**
+     * method updates the textViewSteps in the Main Activity by accessing the SensorEventListener event
+     * @param event
+     */
     @Override
     public void onSensorChanged(SensorEvent event) {
-        System.out.println(event.values[0]);
-        Log.v("hello", String.valueOf(event.values[0]));
-        textViewSteps.setText(String.valueOf(event.values[0]));
+        //System.out.println(event.values[0]);
+        Log.v("hello", String.valueOf((int) event.values[0]));
+        textViewSteps.setText(String.valueOf((int) event.values[0]));
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
+
+    /*
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // take off the Listener of the Sensor (while Sensor is counting by itself in the BG)
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // take over the Sensor and checkin a Listener
+    }
+    */
 }
