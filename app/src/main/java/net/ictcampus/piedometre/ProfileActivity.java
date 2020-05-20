@@ -37,13 +37,13 @@ public class ProfileActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         // Set up the buttons (and a title), on Cancel dismiss()
-        builder.setTitle("Edit your information").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.EditDialogTitle).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // call the method to read from the input and update the current information in the profile
                 dialog.dismiss();
             }
-        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

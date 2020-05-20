@@ -22,5 +22,8 @@
     <string name="training_type_running">running</string>
     <string name="training_type_cycling">cycling</string>
     <string name="training_type_hiking">hiking</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="EditDialogTitle">Edit your information</string>
 
 </resources>
