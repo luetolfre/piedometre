@@ -10,5 +10,8 @@
     <string name="km_h">km/h</string>
     <string name="start_time_00">00:00:00</string>
     <string name="start_speed_0">0.0</string>
+    <string name="training_type_running">running</string>
+    <string name="training_type_cycling">cycling</string>
+    <string name="training_type_hiking">hiking</string>
 
 </resources>
