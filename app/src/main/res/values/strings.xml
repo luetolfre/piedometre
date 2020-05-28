@@ -25,5 +25,12 @@
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="EditDialogTitle">Edit your information</string>
+    <string name="your_profile">Your Profile</string>
+    <string name="weight">Weight:</string>
+    <string name="step_lenght">Step lenght:</string>
+    <string name="name">"Name: "</string>
+    <string name="input_weight">WEIGHT</string>
+    <string name="input_name">NAME</string>
+    <string name="input_steplength">STEPLENGTH</string>
 
 </resources>

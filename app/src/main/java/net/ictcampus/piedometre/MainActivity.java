@@ -114,11 +114,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
 
-    /*
+
     @Override
     protected void onPause() {
         super.onPause();
-        // take off the Listener of the Sensor (while Sensor is counting by itself in the BG)
+        // take off the Listener of the Sensor (while Sensor is counting by itself in the BG, powersaving reasons)
+        mSensorManager.unregisterListener(this, myStepSensor);
     }
 
     @Override
@@ -126,5 +127,5 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onResume();
         // take over the Sensor and checkin a Listener
     }
-    */
+
 }
