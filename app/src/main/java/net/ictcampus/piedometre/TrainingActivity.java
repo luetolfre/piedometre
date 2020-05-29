@@ -130,8 +130,8 @@ public class TrainingActivity extends AppCompatActivity {
      * pauses the timer
      */
     private void pauseTimer() {
+        handler.removeCallbacks(timeRunnable);
         measuredTime = SystemClock.uptimeMillis() - startTime + measuredTime;
-        //updateTimer(measuredTime);
         Toast.makeText(getApplicationContext(), String.format("paused : %s", formatTime(measuredTime)), Toast.LENGTH_SHORT).show();
         timerIsRunning = false;
         startButton.setText(R.string.start_training);
@@ -142,6 +142,7 @@ public class TrainingActivity extends AppCompatActivity {
      * ends the timer/training
      */
     private void endTraining() {
+        handler.removeCallbacks(timeRunnable);
         Log.v(MEASUREDTIME, String.valueOf(measuredTime));
         measuredTime = SystemClock.uptimeMillis() - startTime + measuredTime;
         updateTimer(measuredTime);
