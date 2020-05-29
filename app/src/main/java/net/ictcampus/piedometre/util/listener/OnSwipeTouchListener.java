@@ -1,4 +1,4 @@
-package net.ictcampus.piedometre.listeners;
+package net.ictcampus.piedometre.util.listener;
 
 import android.content.Context;
 import android.view.GestureDetector;
@@ -7,6 +7,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
+/**
+ * <h3> On Swipe Touch Listener </h3>
+ * represents a Listener for detecting swiping touches
+ *
+ * @author luetolfre
+ * @version 1.0
+ * @since 2020-05-28
+ */
 public class OnSwipeTouchListener implements OnTouchListener {
 
     private final GestureDetector gestureDetector;

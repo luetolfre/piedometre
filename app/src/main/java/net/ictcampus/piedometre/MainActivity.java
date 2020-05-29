@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      */
     public void startTrainingActivity(View view) {
         Intent training = new Intent(getApplicationContext(), TrainingActivity.class);
-        Toast.makeText(getApplicationContext(), "training", Toast.LENGTH_SHORT).show();
         startActivity(training);
     }
 
