@@ -49,7 +49,7 @@ public class TrainingActivity extends AppCompatActivity {
     private int options = trainingTypeList.size();
 
     // -- SPEED --
-    private double stepLength = 0.75; // in m
+    private double stepLength = 75; // in cm
     private int startStepCount = 0;
     private int endStepCount;
 
@@ -181,7 +181,7 @@ public class TrainingActivity extends AppCompatActivity {
      * @param milliSecondTime that will be formated
      * @return String in the format MM:ss:mm
      */
-    private String formatTime(Long milliSecondTime){
+    public String formatTime(Long milliSecondTime){
         int seconds = (int) (milliSecondTime/1000);
         int minutes = seconds / 60;
         seconds = seconds % 60;
@@ -225,7 +225,4 @@ public class TrainingActivity extends AppCompatActivity {
 
         editor.apply();
     }
-
-
-
 }
