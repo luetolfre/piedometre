@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import net.ictcampus.piedometre.util.listener.OnSwipeTouchListener;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -69,6 +72,9 @@ public class TrainingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training);
+        // TODO stepcounter include for current steps add stepCounter to main
+        StepsCounter stepsCounter = new StepsCounter((SensorManager)getSystemService(Context.SENSOR_SERVICE));
+        Log.v("steps", String.valueOf(stepsCounter.getCurrentSteps()));
 
         // find views
         trainingToggle = findViewById(R.id.textViewTrainingTypeToggle);
