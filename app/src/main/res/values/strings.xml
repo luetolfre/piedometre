@@ -27,11 +27,15 @@
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="EditDialogTitle">Edit your information</string>
+    <string name="FirstEditDialogTitle">Welcome to piedometre! Please enter valid information for more accurate results. We trust you´ll be happy, sir!</string>
     <string name="your_profile">Your Profile</string>
     <string name="weight">Weight:</string>
     <string name="step_lenght">Step lenght:</string>
+    <string name="daily_steps">Daily Steps:</string>
     <string name="name">"Name: "</string>
     <string name="input_weight">WEIGHT</string>
     <string name="input_name">NAME</string>
-    <string name="input_steplength">STEPLENGTH</string>
+    <string name="input_steplenght">LENGTH</string>
+    <string name="input_dailysteps">DAILYSTEPS</string>
+
 </resources>
