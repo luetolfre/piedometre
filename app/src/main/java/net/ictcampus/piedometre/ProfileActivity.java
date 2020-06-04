@@ -33,6 +33,7 @@ public class ProfileActivity extends AppCompatActivity {
     public static final String NAME = "name";
     public static final String WEIGHT = "weight";
     public static final String STEPLENGTH = "steplength";
+    public static final String DAILYSTEPS = "dailysteps";
 
 
 
@@ -67,6 +68,7 @@ public class ProfileActivity extends AppCompatActivity {
         final EditText inputName = new EditText(this);
         final EditText inputWeight = new EditText(this);
         final EditText inputSteplength = new EditText(this);
+        final EditText inputDailySteps = new EditText(this);
 
 
         // Set up the buttons (and a title), on Cancel dismiss()
@@ -82,6 +84,7 @@ public class ProfileActivity extends AppCompatActivity {
                 editor.putString(NAME, inputName.getText().toString());
                 editor.putString(WEIGHT, inputWeight.getText().toString());
                 editor.putString(STEPLENGTH, inputSteplength.getText().toString());
+                editor.putString(DAILYSTEPS, inputDailySteps.getText().toString());
                 editor.apply();
 
                 // handle the stored information in method updateTextView to display them
@@ -127,6 +130,11 @@ public class ProfileActivity extends AppCompatActivity {
         inputSteplength.setHint("Steplength in cm");
         inputs.addView(inputSteplength);
 
+        inputDailySteps.setInputType(InputType.TYPE_CLASS_NUMBER);
+        inputDailySteps.setText(profile.getString(DAILYSTEPS, "Steps a Day"));
+        inputDailySteps.setHint("Steps a Day");
+        inputs.addView(inputDailySteps);
+
         builder.setView(inputs);
         builder.show();
     }
@@ -142,10 +150,18 @@ public class ProfileActivity extends AppCompatActivity {
         TextView nameView = findViewById(R.id.textViewName);
         TextView weightView = findViewById(R.id.textViewWeight);
         TextView steplengthView = findViewById(R.id.textViewStepLength);
+        TextView dailyStepsView = findViewById(R.id.textViewDailySteps);
 
         // set the input values to the text view in activity_profile
         nameView.setText(profile.getString(NAME, "NAME"));
         weightView.setText(profile.getString(WEIGHT, "WEIGHT"));
         steplengthView.setText(profile.getString(STEPLENGTH, "STEPLENGTH"));
+        dailyStepsView.setText(profile.getString(DAILYSTEPS, "DAILYSTEPS"));
+    }
+
+    public int getDailySteps() {
+        SharedPreferences profile = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        int dailySteps = Integer.getInteger(profile.getString(DAILYSTEPS, "100"));
+        return dailySteps;
     }
 }

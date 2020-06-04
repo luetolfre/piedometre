@@ -19,15 +19,19 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import static net.ictcampus.piedometre.ProfileActivity.DAILYSTEPS;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     SensorManager mSensorManager;
     Sensor myStepSensor;
     TextView textViewSteps;
+    ProgressBar progressBarSteps;
 
     /**
      * Variables to the Shared Preferences
@@ -44,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         setContentView(R.layout.activity_main);
         switchListenerDarkLightMode();
 
+
+
         // first off, check if its a fresh install of the App
         boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
         if (isFirstRun) {
@@ -52,8 +58,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
         getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstRun", false).commit();
 
-
         textViewSteps = findViewById(R.id.textViewCount);
+        progressBarSteps = findViewById(R.id.progressbarSteps);
+
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         assert mSensorManager != null;
@@ -133,9 +140,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
 
 
@@ -149,12 +154,29 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onResume() {
         super.onResume();
-        // take over the Sensor and checkin a Listener
     }
 
 
-    public void updateProgressBar(int progress) {
+    /**
+     * Method updates the progressBar in .xml for visual information
+     * @param stepProgress int value of steps counted
+     */
 
+    public void updateProgressBar(int stepProgress) {
+        // access the shared preferences to check the dailySteps goal
+        SharedPreferences profile = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+
+        int dailySteps = Integer.parseInt(profile.getString(DAILYSTEPS, "10"));
+        // the progress in percents
+        int progInPerc = (stepProgress * 100 / dailySteps);
+        Log.v("Percentage", String.valueOf(progInPerc));
+        if (progInPerc >= 100) {
+            progressBarSteps.setProgress(100);
+        } if (progInPerc <= 20) {
+            progressBarSteps.setProgress(20);
+        } else {
+            progressBarSteps.setProgress((int) progInPerc);
+        }
     }
 
     /**
@@ -167,6 +189,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         final EditText inputName = new EditText(this);
         final EditText inputWeight = new EditText(this);
         final EditText inputSteplength = new EditText(this);
+        final EditText inputDailySteps = new EditText(this);
 
 
         // Set up the buttons (and a title), on Cancel dismiss()
@@ -179,7 +202,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 SharedPreferences.Editor editor = profile.edit();
 
                 // read from the input and check on valid information
-                if (inputName.getText().toString().length() < 2 || inputWeight.getText().toString().length() < 2 || inputSteplength.getText().toString().length() < 2) {
+                if (inputName.getText().toString().length() < 2 ||
+                        inputWeight.getText().toString().length() < 2 ||
+                        inputSteplength.getText().toString().length() < 2 ||
+                        inputDailySteps.getText().toString().length() < 2) {
+
                     // builder.setCancelable(false);
                     Toast.makeText(MainActivity.this, "Enter valid information", Toast.LENGTH_LONG).show();
                     openEditDialog();
@@ -188,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     editor.putString(NAME, inputName.getText().toString());
                     editor.putString(WEIGHT, inputWeight.getText().toString());
                     editor.putString(STEPLENGTH, inputSteplength.getText().toString());
+                    editor.putString(DAILYSTEPS, inputDailySteps.getText().toString());
                     editor.apply();
 
                     // with updated activity_profile, the dialog can get closed
@@ -215,6 +243,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         inputSteplength.setInputType(InputType.TYPE_CLASS_NUMBER);
         inputSteplength.setHint(profile.getString(STEPLENGTH, "Steplength in cm"));
         inputs.addView(inputSteplength);
+
+        inputDailySteps.setInputType(InputType.TYPE_CLASS_NUMBER);
+        inputDailySteps.setHint(profile.getString(DAILYSTEPS, "Steps a Day Goal"));
+        inputs.addView(inputDailySteps);
 
         builder.setView(inputs);
         AlertDialog alertDialog = builder.show();

@@ -31,8 +31,11 @@
     <string name="your_profile">Your Profile</string>
     <string name="weight">Weight:</string>
     <string name="step_lenght">Step lenght:</string>
+    <string name="daily_steps">Daily Steps:</string>
     <string name="name">"Name: "</string>
     <string name="input_weight">WEIGHT</string>
     <string name="input_name">NAME</string>
     <string name="input_steplenght">LENGTH</string>
+    <string name="input_dailysteps">DAILYSTEPS</string>
+
 </resources>
