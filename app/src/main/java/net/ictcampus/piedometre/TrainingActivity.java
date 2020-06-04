@@ -9,6 +9,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.SensorManager;
+import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -20,8 +22,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * <h3> Training Activity </h3>
@@ -33,10 +39,18 @@ import java.util.Locale;
  */
 public class TrainingActivity extends AppCompatActivity {
     // ---- CONSTANTS ----
-    private static final String PREFS = "prefs";
+    private static final String CURRENT_TRAINING = "currentTraining";
+    private static final String TRAININGS = "trainings";
     private static final String STARTTIME = "startTime";
     private static final String MEASUREDTIME = "measuredTime";
     private static final String TIMERSTARTED = "timerStarted";
+
+    private static final String CURRENT_DATE = "currentDate";
+    private static final String TYPE = "trainingsType";
+    private static final String SPEED = "trainingsSpeed";
+    private static final String DURATION = "duration";
+    private static final String STEP_COUNT = "trainingsStepCount";
+
 
     // ---- VIEWS ----
     private ProgressBar progressBarTrainingType;
@@ -49,12 +63,14 @@ public class TrainingActivity extends AppCompatActivity {
     // -- TYPE --
     private List<Integer> trainingTypeList = Arrays.asList(R.string.training_type_running, R.string.training_type_cycling, R.string.training_type_hiking);
     private int currentIndex;
+    private int currentType;
     private int options = trainingTypeList.size();
 
     // -- SPEED --
-    private double stepLength = 0.75; // in m
+    private double stepLength = 75; // in cm
     private int startStepCount = 0;
-    private int endStepCount;
+    private int endStepCount = 1000;
+    private int speed; // in km/h?? in m/s??
 
     // -- TIMER --
     private Handler handler;
@@ -72,9 +88,13 @@ public class TrainingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training);
+
         // TODO stepcounter include for current steps add stepCounter to main
         StepsCounter stepsCounter = new StepsCounter((SensorManager)getSystemService(Context.SENSOR_SERVICE));
         Log.v("steps", String.valueOf(stepsCounter.getCurrentSteps()));
+
+        putTrainingIntoPrefs();
+        putTrainingIntoPrefs();
 
         // find views
         trainingToggle = findViewById(R.id.textViewTrainingTypeToggle);
@@ -127,6 +147,7 @@ public class TrainingActivity extends AppCompatActivity {
         startTime = SystemClock.uptimeMillis();
         Toast.makeText(getApplicationContext(), String.format("started : %s", formatTime(measuredTime)), Toast.LENGTH_SHORT).show();
         timerIsRunning = true;
+        currentType = trainingTypeList.get(currentIndex);
         startButton.setText(R.string.pause_training);
         // start runnable
         handler.post(timeRunnable);
@@ -160,6 +181,23 @@ public class TrainingActivity extends AppCompatActivity {
         measuredTime = 0L;
     }
 
+    private void putTrainingIntoPrefs(){
+        SharedPreferences prefs = getSharedPreferences(TRAININGS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        DateFormat dateFormat = SimpleDateFormat.getDateTimeInstance();
+        String currentDate = dateFormat.format(new Date());
+
+        Set<String> training = new HashSet<>();
+        training.add("stepCount"); // stringlike integer
+        training.add("type"); // running, cycling or hiking
+        training.add("speed"); // stringlike integer
+        training.add("duration"); // stringlike timeformat 00:00:00 MM:ss:ms
+
+        editor.putStringSet(currentDate, training);
+        editor.apply();
+    }
+
     /**
      * runnable that updates the time on the textView
      */
@@ -187,7 +225,7 @@ public class TrainingActivity extends AppCompatActivity {
      * @param milliSecondTime that will be formated
      * @return String in the format MM:ss:mm
      */
-    private String formatTime(Long milliSecondTime){
+    public String formatTime(Long milliSecondTime){
         int seconds = (int) (milliSecondTime/1000);
         int minutes = seconds / 60;
         seconds = seconds % 60;
@@ -203,7 +241,7 @@ public class TrainingActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences(CURRENT_TRAINING, MODE_PRIVATE);
 
         timerIsRunning = prefs.getBoolean(TIMERSTARTED, false);
         startTime = prefs.getLong(STARTTIME, 0L);
@@ -222,7 +260,7 @@ public class TrainingActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences(CURRENT_TRAINING, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
         editor.putLong(STARTTIME, startTime);
@@ -231,7 +269,4 @@ public class TrainingActivity extends AppCompatActivity {
 
         editor.apply();
     }
-
-
-
 }

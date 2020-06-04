@@ -16,7 +16,7 @@
         android:layout_height="230dp"
         android:indeterminate="false"
         android:max="150"
-        android:progress="100"
+        android:progress="20"
         android:progressDrawable="@drawable/custom_progress"
         android:progressTint="@color/colorProgressSteps"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -136,7 +136,7 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/progressbarSteps"
         app:layout_constraintEnd_toEndOf="@+id/progressbarSteps"
-        app:layout_constraintHorizontal_bias="0.473"
+        app:layout_constraintHorizontal_bias="0.538"
         app:layout_constraintStart_toStartOf="@+id/progressbarSteps"
         app:layout_constraintTop_toBottomOf="@+id/textViewCount"
         app:layout_constraintVertical_bias="0.0" />
@@ -162,7 +162,7 @@
         android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="@+id/progressbarSteps"
         app:layout_constraintEnd_toEndOf="@+id/progressbarSteps"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintStart_toStartOf="@+id/progressbarSteps"
         app:layout_constraintTop_toTopOf="@+id/progressbarSteps"
         app:layout_constraintVertical_bias="0.386" />

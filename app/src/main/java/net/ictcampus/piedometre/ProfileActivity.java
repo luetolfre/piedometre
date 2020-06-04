@@ -7,24 +7,16 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.text.InputType;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -37,10 +29,11 @@ public class ProfileActivity extends AppCompatActivity {
     /**
      * variables are used to get values out of the edit dialog and stored in the SharedPreferences
      */
-    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String SHARED_PREFS = "profile";
     public static final String NAME = "name";
     public static final String WEIGHT = "weight";
     public static final String STEPLENGTH = "steplength";
+    public static final String DAILYSTEPS = "dailysteps";
 
 
 
@@ -55,7 +48,6 @@ public class ProfileActivity extends AppCompatActivity {
         // get the TextViews from here
         setContentView(R.layout.activity_profile);
         updateTextView();
-        SharedPreferences profile = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
 
         edit = findViewById(R.id.floatingActionButtonEdit);
         edit.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +68,7 @@ public class ProfileActivity extends AppCompatActivity {
         final EditText inputName = new EditText(this);
         final EditText inputWeight = new EditText(this);
         final EditText inputSteplength = new EditText(this);
+        final EditText inputDailySteps = new EditText(this);
 
 
         // Set up the buttons (and a title), on Cancel dismiss()
@@ -91,7 +84,8 @@ public class ProfileActivity extends AppCompatActivity {
                 editor.putString(NAME, inputName.getText().toString());
                 editor.putString(WEIGHT, inputWeight.getText().toString());
                 editor.putString(STEPLENGTH, inputSteplength.getText().toString());
-                editor.commit();
+                editor.putString(DAILYSTEPS, inputDailySteps.getText().toString());
+                editor.apply();
 
                 // handle the stored information in method updateTextView to display them
                 updateTextView();
@@ -100,12 +94,20 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+
+            /**
+             * onClick cancel, Dialog dismisses
+             * @param dialog DialogInterface
+             * @param which int
+             */
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
         });
 
+        // instance to access SharedPreferences
+        SharedPreferences profile = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
 
         // linear layout to set the inputs
         final LinearLayout inputs = new LinearLayout(this);
@@ -114,16 +116,24 @@ public class ProfileActivity extends AppCompatActivity {
         // Set up the text input field for the TextInput to change profile information
 
         inputName.setInputType(InputType.TYPE_CLASS_TEXT);
-        inputName.setHint("Name");
+        inputName.setText(profile.getString(NAME, "Your Name"));
+        inputName.setHint("Name or Nickname");
         inputs.addView(inputName);
 
         inputWeight.setInputType(InputType.TYPE_CLASS_NUMBER);
-        inputWeight.setHint("Weight" + " kg");
+        inputWeight.setText(profile.getString(WEIGHT, "Weight in kg"));
+        inputWeight.setHint("Weight in kg");
         inputs.addView(inputWeight);
 
         inputSteplength.setInputType(InputType.TYPE_CLASS_NUMBER);
-        inputSteplength.setHint("Step length" + " cm");
+        inputSteplength.setText(profile.getString(STEPLENGTH, "Steplength in cm"));
+        inputSteplength.setHint("Steplength in cm");
         inputs.addView(inputSteplength);
+
+        inputDailySteps.setInputType(InputType.TYPE_CLASS_NUMBER);
+        inputDailySteps.setText(profile.getString(DAILYSTEPS, "Steps a Day"));
+        inputDailySteps.setHint("Steps a Day");
+        inputs.addView(inputDailySteps);
 
         builder.setView(inputs);
         builder.show();
@@ -140,10 +150,18 @@ public class ProfileActivity extends AppCompatActivity {
         TextView nameView = findViewById(R.id.textViewName);
         TextView weightView = findViewById(R.id.textViewWeight);
         TextView steplengthView = findViewById(R.id.textViewStepLength);
+        TextView dailyStepsView = findViewById(R.id.textViewDailySteps);
 
         // set the input values to the text view in activity_profile
         nameView.setText(profile.getString(NAME, "NAME"));
         weightView.setText(profile.getString(WEIGHT, "WEIGHT"));
         steplengthView.setText(profile.getString(STEPLENGTH, "STEPLENGTH"));
+        dailyStepsView.setText(profile.getString(DAILYSTEPS, "DAILYSTEPS"));
+    }
+
+    public int getDailySteps() {
+        SharedPreferences profile = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        int dailySteps = Integer.getInteger(profile.getString(DAILYSTEPS, "100"));
+        return dailySteps;
     }
 }
