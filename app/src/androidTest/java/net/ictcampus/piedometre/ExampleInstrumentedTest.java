@@ -24,4 +24,7 @@ public class ExampleInstrumentedTest {
 
         assertEquals("net.ictcampus.piedometre", appContext.getPackageName());
     }
+
+
+
 }

@@ -6,4 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".StatsActivity">
 
+    <TextView
+        android:id="@+id/textViewTrends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Trends"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.089" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/lineChart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTrends"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
