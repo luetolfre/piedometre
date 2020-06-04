@@ -5,13 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import net.ictcampus.piedometre.util.listener.OnSwipeTouchListener;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.hardware.SensorManager;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -20,7 +21,6 @@ import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -38,16 +38,15 @@ public class TrainingActivity extends AppCompatActivity {
     // ---- CONSTANTS ----
     private static final String CURRENT_TRAINING = "currentTraining";
     private static final String TRAININGS = "trainings";
-    private static final String STARTTIME = "startTime";
-    private static final String MEASUREDTIME = "measuredTime";
-    private static final String TIMERSTARTED = "timerStarted";
+    private static final String START_TIME = "startTime";
+    private static final String MEASURED_TIME = "measuredTime";
+    private static final String TIMER_STARTED = "timerStarted";
 
     private static final String CURRENT_DATE = "currentDate";
     private static final String TYPE = "trainingsType";
     private static final String SPEED = "trainingsSpeed";
     private static final String DURATION = "duration";
     private static final String STEP_COUNT = "trainingsStepCount";
-
 
     // ---- VIEWS ----
     private ProgressBar progressBarTrainingType;
@@ -60,14 +59,17 @@ public class TrainingActivity extends AppCompatActivity {
     // -- TYPE --
     private List<Integer> trainingTypeList = Arrays.asList(R.string.training_type_running, R.string.training_type_cycling, R.string.training_type_hiking);
     private int currentIndex;
-    private int currentType;
+    private String currentType;
     private int options = trainingTypeList.size();
 
     // -- SPEED --
-    private double stepLength = 75; // in cm
+    private SensorManager sensorManager;
+    private StepsCounter stepCounter;
+    private double stepLength; // in m
     private int startStepCount = 0;
-    private int endStepCount = 1000;
-    private int speed; // in km/h?? in m/s??
+    private int measuredStepCount;
+    private double currentSpeed; // in km/h
+    private double averageSpeed = 5.23;
 
     // -- TIMER --
     private Handler handler;
@@ -85,10 +87,13 @@ public class TrainingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training);
-        putTrainingIntoPrefs();
-        putTrainingIntoPrefs();
 
+        this.sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        assert this.sensorManager != null;
+        this.stepCounter = new StepsCounter(this.sensorManager);
 
+        putTrainingIntoPrefs(currentType, measuredStepCount, averageSpeed, measuredTime);
+        putTrainingIntoPrefs(currentType, measuredStepCount, averageSpeed, measuredTime);
 
         // find views
         trainingToggle = findViewById(R.id.textViewTrainingTypeToggle);
@@ -139,9 +144,9 @@ public class TrainingActivity extends AppCompatActivity {
      */
     private void startTimer() {
         startTime = SystemClock.uptimeMillis();
-        Toast.makeText(getApplicationContext(), String.format("started : %s", formatTime(measuredTime)), Toast.LENGTH_SHORT).show();
+        startStepCount = stepCounter.getCurrentSteps();
+        currentType = String.valueOf(trainingToggle.getText());
         timerIsRunning = true;
-        currentType = trainingTypeList.get(currentIndex);
         startButton.setText(R.string.pause_training);
         // start runnable
         handler.post(timeRunnable);
@@ -153,10 +158,9 @@ public class TrainingActivity extends AppCompatActivity {
     private void pauseTimer() {
         handler.removeCallbacks(timeRunnable);
         measuredTime = SystemClock.uptimeMillis() - startTime + measuredTime;
-        Toast.makeText(getApplicationContext(), String.format("paused : %s", formatTime(measuredTime)), Toast.LENGTH_SHORT).show();
+        measuredStepCount = stepCounter.getCurrentSteps() - startStepCount + measuredStepCount;
         timerIsRunning = false;
         startButton.setText(R.string.start_training);
-        Log.v("starttime", String.valueOf(startTime));
     }
 
     /**
@@ -164,18 +168,26 @@ public class TrainingActivity extends AppCompatActivity {
      */
     private void endTraining() {
         handler.removeCallbacks(timeRunnable);
-        Log.v(MEASUREDTIME, String.valueOf(measuredTime));
         measuredTime = SystemClock.uptimeMillis() - startTime + measuredTime;
+        measuredStepCount = stepCounter.getCurrentSteps() - startStepCount + measuredStepCount;
+        averageSpeed = measuredStepCount*stepLength/measuredTime*36;
         updateTimer(measuredTime);
-        // TODO : Do something with measured time
+        updateSpeed(averageSpeed);
+        putTrainingIntoPrefs(currentType, measuredStepCount, averageSpeed, measuredTime);
         Toast.makeText(getApplicationContext(), String.format("ended : %s", formatTime(measuredTime)), Toast.LENGTH_SHORT).show();
-        Log.v(MEASUREDTIME, String.valueOf(measuredTime));
         startButton.setText(R.string.start_training);
         timerIsRunning = false;
         measuredTime = 0L;
     }
 
-    private void putTrainingIntoPrefs(){
+    /**
+     * Adds the training into a String Set of the name current date
+     * @param type String of the trainings type
+     * @param stepCount integer of the steps taken
+     * @param speed double of average speed in km/h
+     * @param duration long trainings duration in ms
+     */
+    private void putTrainingIntoPrefs(String type, int stepCount, double speed, long duration){
         SharedPreferences prefs = getSharedPreferences(TRAININGS, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
@@ -183,10 +195,10 @@ public class TrainingActivity extends AppCompatActivity {
         String currentDate = dateFormat.format(new Date());
 
         Set<String> training = new HashSet<>();
-        training.add("stepCount"); // stringlike integer
-        training.add("type"); // running, cycling or hiking
-        training.add("speed"); // stringlike integer
-        training.add("duration"); // stringlike timeformat 00:00:00 MM:ss:ms
+        training.add(String.valueOf(stepCount)); // stringlike integer
+        training.add(type); // running, cycling or hiking
+        training.add(String.valueOf(speed)); // stringlike integer
+        training.add(String.valueOf(duration)); // stringlike timeformat 00:00:00 MM:ss:ms
 
         editor.putStringSet(currentDate, training);
         editor.apply();
@@ -199,7 +211,9 @@ public class TrainingActivity extends AppCompatActivity {
         @Override
         public void run() {
             currentTime = SystemClock.uptimeMillis() - startTime + measuredTime;
+            currentSpeed = (stepLength) * (stepCounter.getCurrentSteps() - startStepCount + measuredStepCount) / currentTime;
             updateTimer(currentTime);
+            updateSpeed(currentSpeed);
             if (timerIsRunning){
                 handler.post(this);
             }
@@ -207,11 +221,19 @@ public class TrainingActivity extends AppCompatActivity {
     };
 
     /**
-     * puts the time to the trainingtimer
+     * puts the time to the training timer text view
      * @param time in milliseconds
      */
     private void updateTimer(Long time){
         trainingTimer.setText(formatTime(time));
+    }
+
+    /**
+     * puts the speed to the trainings speed text view
+     * @param speed double in cm/ms
+     */
+    private void updateSpeed(double speed){
+        trainingSpeed.setText(String.format(Locale.getDefault(),"%.3f",speed*36));
     }
 
     /**
@@ -236,16 +258,19 @@ public class TrainingActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         SharedPreferences prefs = getSharedPreferences(CURRENT_TRAINING, MODE_PRIVATE);
-
-        timerIsRunning = prefs.getBoolean(TIMERSTARTED, false);
-        startTime = prefs.getLong(STARTTIME, 0L);
-        measuredTime = prefs.getLong(MEASUREDTIME, 0L);
+        // TODO save all relevant variables in prefs
+        timerIsRunning = prefs.getBoolean(TIMER_STARTED, false);
+        startTime = prefs.getLong(START_TIME, 0L);
+        measuredTime = prefs.getLong(MEASURED_TIME, 0L);
+        currentType = prefs.getString("currentType", "running");
         // set the timer
         if (timerIsRunning){
             handler.post(timeRunnable);
         } else {
             trainingTimer.setText(formatTime(startTime));
         }
+        SharedPreferences profilePrefs = getSharedPreferences("profile", MODE_PRIVATE);
+        stepLength = Integer.parseInt(profilePrefs.getString("steplength", "80"));
     }
 
     /**
@@ -257,9 +282,10 @@ public class TrainingActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(CURRENT_TRAINING, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        editor.putLong(STARTTIME, startTime);
-        editor.putLong(MEASUREDTIME, measuredTime);
-        editor.putBoolean("timerStarted", timerIsRunning);
+        editor.putLong(START_TIME, startTime);
+        editor.putLong(MEASURED_TIME, measuredTime);
+        editor.putBoolean(TIMER_STARTED, timerIsRunning);
+        editor.putString("currentType", currentType);
 
         editor.apply();
     }
