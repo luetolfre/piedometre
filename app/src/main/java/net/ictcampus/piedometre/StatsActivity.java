@@ -127,7 +127,7 @@ public class StatsActivity extends AppCompatActivity {
         set.setColors(ColorTemplate.COLORFUL_COLORS);
         set.setLineWidth(2.5f);
         set.setCircleColor(Color.rgb(240, 238, 70));
-        set.setCircleRadius(5f);
+        set.setCircleRadius(0);
         set.setFillColor(Color.rgb(240, 238, 70));
         set.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         set.setDrawValues(true);
@@ -152,7 +152,7 @@ public class StatsActivity extends AppCompatActivity {
         set1.setValueTextSize(10f);
         set1.setAxisDependency(YAxis.AxisDependency.LEFT);
 
-        float barWidth = 0.45f; // x2 dataset
+        float barWidth = 0.4f; // x2 dataset
 
         BarData d = new BarData(set1);
         d.setBarWidth(barWidth);
