@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Color;
 import android.os.Bundle;
 
-import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 
 public class StatsActivity extends AppCompatActivity {
 
-    protected String[] mMonths = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "June"};
+
     private LineData data;
     private CombinedChart mChart;
 
@@ -53,6 +52,7 @@ public class StatsActivity extends AppCompatActivity {
         // Axis on both sides of the Graph
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setDrawGridLines(false);
+        // set Axis Maximum
         rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 
         YAxis leftAxis = mChart.getAxisLeft();
@@ -63,19 +63,15 @@ public class StatsActivity extends AppCompatActivity {
         xAxis.setPosition(XAxis.XAxisPosition.BOTH_SIDED);
         xAxis.setAxisMinimum(0f);
         xAxis.setGranularity(1f);
-        xAxis.setValueFormatter(new IndexAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                return mMonths[(int) value % mMonths.length];
-            }
-        });
+
 
         CombinedData data = new CombinedData();
 
         data.setData(generateLineData());
         data.setData(generateBarData());
 
-        xAxis.setAxisMaximum(data.getXMax() + 0.25f);
+        // set the x Axis maximum dynamically by getXMax
+        xAxis.setAxisMaximum(data.getXMax() + 1f);
         mChart.setData(data);
         mChart.invalidate();
     }
@@ -93,6 +89,7 @@ public class StatsActivity extends AppCompatActivity {
         entries.add(new Entry(3, 8));
         entries.add(new Entry(4, 40));
         entries.add(new Entry(5, 37));
+        entries.add(new Entry(6, 8));
 
         return entries;
     }
@@ -107,6 +104,8 @@ public class StatsActivity extends AppCompatActivity {
         barEntries.add(new BarEntry(3, 38));
         barEntries.add(new BarEntry(4, 10));
         barEntries.add(new BarEntry(5, 15));
+        barEntries.add(new BarEntry(6, 38));
+
         return  barEntries;
     }
 
