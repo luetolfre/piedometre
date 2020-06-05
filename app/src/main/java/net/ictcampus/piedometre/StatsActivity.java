@@ -2,9 +2,12 @@ package net.ictcampus.piedometre;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
@@ -20,10 +23,15 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Map;
 
 public class StatsActivity extends AppCompatActivity {
 
+    private static final String TRAININGS = "trainings";
 
+
+    protected String[] mMonths = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "June"};
     private LineData data;
     private CombinedChart mChart;
 
@@ -52,7 +60,6 @@ public class StatsActivity extends AppCompatActivity {
         // Axis on both sides of the Graph
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setDrawGridLines(false);
-        // set Axis Maximum
         rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 
         YAxis leftAxis = mChart.getAxisLeft();
@@ -63,15 +70,19 @@ public class StatsActivity extends AppCompatActivity {
         xAxis.setPosition(XAxis.XAxisPosition.BOTH_SIDED);
         xAxis.setAxisMinimum(0f);
         xAxis.setGranularity(1f);
-
+        xAxis.setValueFormatter(new IndexAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return mMonths[(int) value % mMonths.length];
+            }
+        });
 
         CombinedData data = new CombinedData();
 
         data.setData(generateLineData());
         data.setData(generateBarData());
 
-        // set the x Axis maximum dynamically by getXMax
-        xAxis.setAxisMaximum(data.getXMax() + 1f);
+        xAxis.setAxisMaximum(data.getXMax() + 0.25f);
         mChart.setData(data);
         mChart.invalidate();
     }
@@ -89,7 +100,6 @@ public class StatsActivity extends AppCompatActivity {
         entries.add(new Entry(3, 8));
         entries.add(new Entry(4, 40));
         entries.add(new Entry(5, 37));
-        entries.add(new Entry(6, 8));
 
         return entries;
     }
@@ -104,8 +114,6 @@ public class StatsActivity extends AppCompatActivity {
         barEntries.add(new BarEntry(3, 38));
         barEntries.add(new BarEntry(4, 10));
         barEntries.add(new BarEntry(5, 15));
-        barEntries.add(new BarEntry(6, 38));
-
         return  barEntries;
     }
 
@@ -142,7 +150,8 @@ public class StatsActivity extends AppCompatActivity {
     private BarData generateBarData() {
 
         ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
-        entries = getBarEnteries(entries);
+       // entries = getBarEnteries(entries);
+        getStepCountBarEntries(getTrainingsKeys(), entries);
 
         BarDataSet set1 = new BarDataSet(entries, "Bar");
         //set1.setColor(Color.rgb(60, 220, 78));
@@ -158,4 +167,34 @@ public class StatsActivity extends AppCompatActivity {
 
         return d;
     }
+
+    private ArrayList<String> getTrainingsKeys(){
+        SharedPreferences pre = getSharedPreferences(TRAININGS, MODE_PRIVATE);
+        Map<String,?> keys = pre.getAll();
+        ArrayList<String> dates = new ArrayList<>();
+
+        for(Map.Entry<String,?> entry : keys.entrySet()){
+            dates.add(entry.getKey());
+        }
+        return dates;
+    }
+
+
+    private void getStepCountBarEntries(ArrayList<String> dates, ArrayList<BarEntry> barEntries){
+        int counter = 1;
+        SharedPreferences pre = getSharedPreferences(TRAININGS, MODE_PRIVATE);
+        int stepCount = 0;
+        for (String date : dates) {
+            HashSet<String> mySet = (HashSet<String>) pre.getStringSet(date, new HashSet<String>());
+            for (String s: mySet) {
+                if(s.startsWith("steps:")){
+                    s = s.replace("steps:", "");
+                    stepCount = Integer.parseInt(s);
+                    barEntries.add(new BarEntry(counter, stepCount));
+                    counter ++;
+                }
+            }
+        }
+    }
+
 }

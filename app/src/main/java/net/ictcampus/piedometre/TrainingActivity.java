@@ -13,17 +13,20 @@ import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -59,7 +62,7 @@ public class TrainingActivity extends AppCompatActivity {
     // -- TYPE --
     private List<Integer> trainingTypeList = Arrays.asList(R.string.training_type_running, R.string.training_type_cycling, R.string.training_type_hiking);
     private int currentIndex;
-    private String currentType;
+    private String currentType = "running";
     private int options = trainingTypeList.size();
 
     // -- SPEED --
@@ -92,9 +95,6 @@ public class TrainingActivity extends AppCompatActivity {
         assert this.sensorManager != null;
         this.stepCounter = new StepsCounter(this.sensorManager);
 
-        putTrainingIntoPrefs(currentType, measuredStepCount, averageSpeed, measuredTime);
-        putTrainingIntoPrefs(currentType, measuredStepCount, averageSpeed, measuredTime);
-
         // find views
         trainingToggle = findViewById(R.id.textViewTrainingTypeToggle);
         progressBarTrainingType = findViewById(R.id.progressBarTrainingType);
@@ -107,6 +107,8 @@ public class TrainingActivity extends AppCompatActivity {
         handler = new Handler();
         measuredTime = 0L;
         updateTimer(measuredTime);
+        putTrainingIntoPrefs(currentType, 40, averageSpeed, measuredTime);
+
 
         // set listeners
         progressBarTrainingType.setOnTouchListener(new OnSwipeTouchListener(TrainingActivity.this) {
@@ -195,10 +197,11 @@ public class TrainingActivity extends AppCompatActivity {
         String currentDate = dateFormat.format(new Date());
 
         Set<String> training = new HashSet<>();
-        training.add(String.valueOf(stepCount)); // stringlike integer
-        training.add(type); // running, cycling or hiking
-        training.add(String.valueOf(speed)); // stringlike integer
-        training.add(String.valueOf(duration)); // stringlike timeformat 00:00:00 MM:ss:ms
+        training.add("steps:" + stepCount); // stringlike integer
+        training.add("type:"+ type); // running, cycling or hiking
+        training.add("speed:"+ speed); // stringlike integer
+        training.add("time:"+ duration); // stringlike timeformat long in ms
+
 
         editor.putStringSet(currentDate, training);
         editor.apply();
@@ -271,6 +274,7 @@ public class TrainingActivity extends AppCompatActivity {
         }
         SharedPreferences profilePrefs = getSharedPreferences("profile", MODE_PRIVATE);
         stepLength = Integer.parseInt(profilePrefs.getString("steplength", "80"));
+        // outputs hashMap. key:date, val: String[]
     }
 
     /**
