@@ -2,6 +2,8 @@ package net.ictcampus.piedometre;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -21,8 +23,13 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Map;
 
 public class StatsActivity extends AppCompatActivity {
+
+    private static final String TRAININGS = "trainings";
+
 
     protected String[] mMonths = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "June"};
     private LineData data;
@@ -143,7 +150,8 @@ public class StatsActivity extends AppCompatActivity {
     private BarData generateBarData() {
 
         ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
-        entries = getBarEnteries(entries);
+       // entries = getBarEnteries(entries);
+        getStepCountBarEntries(getTrainingsKeys(), entries);
 
         BarDataSet set1 = new BarDataSet(entries, "Bar");
         //set1.setColor(Color.rgb(60, 220, 78));
@@ -159,4 +167,34 @@ public class StatsActivity extends AppCompatActivity {
 
         return d;
     }
+
+    private ArrayList<String> getTrainingsKeys(){
+        SharedPreferences pre = getSharedPreferences(TRAININGS, MODE_PRIVATE);
+        Map<String,?> keys = pre.getAll();
+        ArrayList<String> dates = new ArrayList<>();
+
+        for(Map.Entry<String,?> entry : keys.entrySet()){
+            dates.add(entry.getKey());
+        }
+        return dates;
+    }
+
+
+    private void getStepCountBarEntries(ArrayList<String> dates, ArrayList<BarEntry> barEntries){
+        int counter = 1;
+        SharedPreferences pre = getSharedPreferences(TRAININGS, MODE_PRIVATE);
+        int stepCount = 0;
+        for (String date : dates) {
+            HashSet<String> mySet = (HashSet<String>) pre.getStringSet(date, new HashSet<String>());
+            for (String s: mySet) {
+                if(s.startsWith("steps:")){
+                    s = s.replace("steps:", "");
+                    stepCount = Integer.parseInt(s);
+                    barEntries.add(new BarEntry(counter, stepCount));
+                    counter ++;
+                }
+            }
+        }
+    }
+
 }
