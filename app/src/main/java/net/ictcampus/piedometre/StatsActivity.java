@@ -42,7 +42,6 @@ public class StatsActivity extends AppCompatActivity {
 
         // initialize combined chart for a BarChart and a LineChart combination
         mChart = (CombinedChart) findViewById(R.id.lineChart);
-        mChart.setDrawBarShadow(true);
         mChart.setHighlightFullBarEnabled(true);
 
         // methods that calibrate the mChart so that the Axis, Lines and Columns are correctly shown up
@@ -51,11 +50,12 @@ public class StatsActivity extends AppCompatActivity {
         mChart.setDrawOrder(new CombinedChart.DrawOrder[] {CombinedChart.DrawOrder.BAR, CombinedChart.DrawOrder.LINE});
 
         // Legend object gets
-        Legend l = mChart.getLegend();
+        /*Legend l = mChart.getLegend();
         l.setWordWrapEnabled(true);
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
         l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
         l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        */
 
         // Axis on both sides of the Graph
         YAxis rightAxis = mChart.getAxisRight();
@@ -70,12 +70,7 @@ public class StatsActivity extends AppCompatActivity {
         xAxis.setPosition(XAxis.XAxisPosition.BOTH_SIDED);
         xAxis.setAxisMinimum(0f);
         xAxis.setGranularity(1f);
-        xAxis.setValueFormatter(new IndexAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                return mMonths[(int) value % mMonths.length];
-            }
-        });
+
 
         CombinedData data = new CombinedData();
 
@@ -91,33 +86,6 @@ public class StatsActivity extends AppCompatActivity {
 
 
     /**
-     * ArrayList with the entries for the graph values
-     * @return
-     */
-    private ArrayList<Entry> getLineEntriesData(ArrayList<Entry> entries){
-        entries.add(new Entry(1, 20));
-        entries.add(new Entry(2, 10));
-        entries.add(new Entry(3, 8));
-        entries.add(new Entry(4, 40));
-        entries.add(new Entry(5, 37));
-
-        return entries;
-    }
-
-    /**
-     * ArrayList with the entries for the BarGraph values
-     * @return
-     */
-    private ArrayList<BarEntry> getBarEnteries(ArrayList<BarEntry> barEntries){
-        barEntries.add(new BarEntry(1, 25));
-        barEntries.add(new BarEntry(2, 30));
-        barEntries.add(new BarEntry(3, 38));
-        barEntries.add(new BarEntry(4, 10));
-        barEntries.add(new BarEntry(5, 15));
-        return  barEntries;
-    }
-
-    /**
      * LineData creates
      * @return
      */
@@ -126,10 +94,10 @@ public class StatsActivity extends AppCompatActivity {
         LineData d = new LineData();
 
         ArrayList<Entry> entries = new ArrayList<Entry>();
+        getSpeedLineEntries(getTrainingsKeys(), entries);
 
-        entries = getLineEntriesData(entries);
 
-        LineDataSet set = new LineDataSet(entries, "Line");
+        LineDataSet set = new LineDataSet(entries, null);
         //set.setColor(Color.rgb(240, 238, 70));
         set.setColors(ColorTemplate.COLORFUL_COLORS);
         set.setLineWidth(2.5f);
@@ -160,7 +128,7 @@ public class StatsActivity extends AppCompatActivity {
         set1.setValueTextSize(10f);
         set1.setAxisDependency(YAxis.AxisDependency.LEFT);
 
-        float barWidth = 0.4f; // x2 dataset
+        float barWidth = 0.2f; // x2 dataset
 
         BarData d = new BarData(set1);
         d.setBarWidth(barWidth);
@@ -180,6 +148,9 @@ public class StatsActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * ArrayList with the entries for the BarGraph step values
+     */
     private void getStepCountBarEntries(ArrayList<String> dates, ArrayList<BarEntry> barEntries){
         int counter = 1;
         SharedPreferences pre = getSharedPreferences(TRAININGS, MODE_PRIVATE);
@@ -191,6 +162,26 @@ public class StatsActivity extends AppCompatActivity {
                     s = s.replace("steps:", "");
                     stepCount = Integer.parseInt(s);
                     barEntries.add(new BarEntry(counter, stepCount));
+                    counter ++;
+                }
+            }
+        }
+    }
+
+    /**
+     * ArrayList with the entries for the line graph speed values
+     */
+    private void getSpeedLineEntries(ArrayList<String> dates, ArrayList<Entry> lineEntries) {
+        int counter = 1;
+        SharedPreferences pre = getSharedPreferences(TRAININGS, MODE_PRIVATE);
+        float speed = 0;
+        for (String date : dates) {
+            HashSet<String> mySet = (HashSet<String>) pre.getStringSet(date, new HashSet<String>());
+            for (String s: mySet) {
+                if(s.startsWith("speed:")){
+                    s = s.replace("speed:", "");
+                    speed = Float.parseFloat(s);
+                    lineEntries.add(new BarEntry(counter, speed));
                     counter ++;
                 }
             }

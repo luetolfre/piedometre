@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">piedometre</string>
+    <string name="app_name">PiedoMètre</string>
     <string name="steps">Steps</string>
     <string name="training">Training</string>
     <string name="speed">Speed</string>
