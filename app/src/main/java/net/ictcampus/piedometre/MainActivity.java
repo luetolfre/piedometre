@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
     /**
-     * Method updates the progressBar in .xml for visual information
+     * Method updates the progressBar in .xml for more visual information
      * @param stepProgress int value of steps counted
      */
 
@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         } if (progInPerc <= 20) {
             progressBarSteps.setProgress(20);
         } else {
-            progressBarSteps.setProgress((int) progInPerc);
+            progressBarSteps.setProgress(progInPerc);
         }
     }
 
