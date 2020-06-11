@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         if (myStepSensor != null) {
             mSensorManager.registerListener(this, myStepSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
+
+        updateProgressBar(0);
     }
 
 
@@ -89,10 +91,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         });
     }
 
-
-    public void onTestClick(View view) {
-        System.out.println("clikc");
-    }
 
     /**
      * Start of Trainig Activity
@@ -139,11 +137,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         updateProgressBar((int) event.values[0]);
     }
 
+    /**
+     * Method is called whenever the accuracy of the STEP_COUNTER changes
+     * @param sensor Sensor
+     * @param accuracy int
+     */
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
 
-
+    /**
+     * onPause when leaving the App but not closing
+     */
     @Override
     protected void onPause() {
         super.onPause();
@@ -151,6 +156,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mSensorManager.unregisterListener(this, myStepSensor);
     }
 
+    /**
+     * onResume is called after pausing the App or while starting the App after onCreate & onStart
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -161,7 +169,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      * Method updates the progressBar in .xml for more visual information
      * @param stepProgress int value of steps counted
      */
-
     public void updateProgressBar(int stepProgress) {
         // access the shared preferences to check the dailySteps goal
         SharedPreferences profile = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
