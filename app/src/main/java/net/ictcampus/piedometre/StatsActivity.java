@@ -6,12 +6,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.Chart;
+
+
 import com.github.mikephil.charting.charts.CombinedChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LegendEntry;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -22,30 +23,43 @@ import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 
+
+/**
+ * Class is responsible for the Statistic
+ *
+ * @author luetolfre
+ * @version 1.0
+ * @since 2020-06-11
+ */
 public class StatsActivity extends AppCompatActivity {
 
     private static final String TRAININGS = "trainings";
 
-
-    protected String[] mMonths = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "June"};
-    private LineData data;
     private CombinedChart mChart;
+    private TextView view;
 
+
+    /**
+     * create a combined chart
+     * @param savedInstanceState SavedInstance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
 
+        view = findViewById(R.id.textView3);
+
         // initialize combined chart for a BarChart and a LineChart combination
         mChart = (CombinedChart) findViewById(R.id.lineChart);
-        mChart.setHighlightFullBarEnabled(true);
+        // mChart.setHighlightFullBarEnabled(true);
         mChart.setDescription(null);
 
         // methods that calibrate the mChart so that the Axis, Lines and Columns are correctly shown up
@@ -81,22 +95,20 @@ public class StatsActivity extends AppCompatActivity {
         data.setData(generateLineData());
         data.setData(generateBarData());
 
-        checkTrainingBeforeSet();
 
         xAxis.setAxisMaximum(data.getXMax() + 0.25f);
         // xAxis.setValueFormatter(new XAxisValueFormatter());
         mChart.setData(data);
         mChart.getLegend().setCustom( new LegendEntry[0]);
 
+        checkTrainingBeforeSet();
         mChart.invalidate();
     }
 
 
-
-
     /**
-     * LineData creates
-     * @return
+     * LineData creates values for the Line Chart
+     * @return d LineData
      */
     private LineData generateLineData() {
 
@@ -124,6 +136,10 @@ public class StatsActivity extends AppCompatActivity {
         return d;
     }
 
+    /**
+     * Creates values for the Bar Chart
+     * @return d BarData
+     */
     private BarData generateBarData() {
 
         ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
@@ -148,6 +164,10 @@ public class StatsActivity extends AppCompatActivity {
         return d;
     }
 
+    /**
+     * read dates from
+     * @return ArrayList with all keys containing dates
+     */
     private ArrayList<String> getTrainingsKeys(){
         SharedPreferences pre = getSharedPreferences(TRAININGS, MODE_PRIVATE);
         Map<String,?> keys = pre.getAll();
@@ -200,14 +220,12 @@ public class StatsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * check if there are trainings are recorded
+     */
     public void checkTrainingBeforeSet() {
         if (getTrainingsKeys().size() == 0) {
-            Description des = mChart.getDescription();
-            des.setEnabled(true);
-            des.setText("Unfortunately no Trainings recorded yet");
-            des.setPosition(770, 200);
-            des.setTextSize(13);
-            mChart.setDescription(des);
+            view.setVisibility(View.VISIBLE);
         }
     }
 

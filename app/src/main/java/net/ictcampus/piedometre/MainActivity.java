@@ -26,6 +26,14 @@ import android.widget.Toast;
 
 import static net.ictcampus.piedometre.ProfileActivity.DAILYSTEPS;
 
+
+/**
+ * Main activity starts the screen with four tiles which is eighter a button or provides informations
+ *
+ * @author luetolfre
+ * @version 1.0
+ * @since 2020-06-11
+ */
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     SensorManager mSensorManager;
@@ -133,8 +141,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onSensorChanged(SensorEvent event) {
         //System.out.println(event.values[0]);
         Log.v("sensor", String.valueOf((int) event.values[0]));
-        textViewSteps.setText(String.valueOf((int) event.values[0]));
         updateProgressBar((int) event.values[0]);
+        textViewSteps.setText(String.valueOf((int) event.values[0]));
     }
 
     /**
@@ -176,12 +184,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         int dailySteps = Integer.parseInt(profile.getString(DAILYSTEPS, "10"));
         // the progress in percents
         int progInPerc = (stepProgress * 100 / dailySteps);
-        Log.v("Percentage", String.valueOf(progInPerc));
-        if (progInPerc >= 100) {
+        if (progInPerc > 100) {
             progressBarSteps.setProgress(100);
-        } if (progInPerc <= 20) {
+        }
+        else if (progInPerc < 20) {
             progressBarSteps.setProgress(20);
-        } else {
+        }
+        else {
             progressBarSteps.setProgress(progInPerc);
         }
     }

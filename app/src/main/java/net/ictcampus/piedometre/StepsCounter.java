@@ -5,7 +5,13 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-
+/**
+ * Class responsible for initializing the STEP_COUNTER
+ *
+ * @author luetolfre
+ * @version 1.0
+ * @since 2020-06-11
+ */
 public class StepsCounter implements SensorEventListener {
     private SensorManager sensorManager;
     private Sensor stepSensor;

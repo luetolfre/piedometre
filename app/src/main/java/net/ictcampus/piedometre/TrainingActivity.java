@@ -35,7 +35,7 @@ import java.util.Set;
  *
  * @author luetolfre
  * @version 1.0
- * @since 2020-05-28
+ * @since 2020-06-11
  */
 public class TrainingActivity extends AppCompatActivity {
     // ---- CONSTANTS ----

@@ -37,5 +37,6 @@
     <string name="input_name">NAME</string>
     <string name="input_steplenght">LENGTH</string>
     <string name="input_dailysteps">DAILYSTEPS</string>
+    <string name="no_trainings">Unfortunately no Trainings recorded yet</string>
 
 </resources>
