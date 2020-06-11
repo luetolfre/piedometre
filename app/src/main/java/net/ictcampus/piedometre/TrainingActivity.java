@@ -95,8 +95,6 @@ public class TrainingActivity extends AppCompatActivity {
         handler = new Handler();
         measuredTime = 0L;
         updateTimer(measuredTime);
-        putTrainingIntoPrefs(currentType, 40, averageSpeed, measuredTime);
-
 
         // set listeners
         progressBarTrainingType.setOnTouchListener(new OnSwipeTouchListener(TrainingActivity.this) {
