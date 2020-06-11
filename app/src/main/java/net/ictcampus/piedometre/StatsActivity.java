@@ -2,17 +2,13 @@ package net.ictcampus.piedometre;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-
-
 import com.github.mikephil.charting.charts.CombinedChart;
-import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.LegendEntry;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -25,14 +21,14 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 
 
 /**
- * Class is responsible for the Statistic
+ * <h3> Stats Activity </h3>
+ * It shows the Statistics of the taken Trainings
  *
  * @author luetolfre
  * @version 1.0
@@ -40,10 +36,9 @@ import java.util.Map;
  */
 public class StatsActivity extends AppCompatActivity {
 
-    private static final String TRAININGS = "trainings";
+    private static final String TRAININGS_SHARED_PREFS = "trainings";
 
-    private CombinedChart mChart;
-    private TextView view;
+    private TextView noDataFoundTextView;
 
 
     /**
@@ -54,11 +49,10 @@ public class StatsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
-
-        view = findViewById(R.id.textView3);
+        noDataFoundTextView = findViewById(R.id.noDataFoundTextView);
 
         // initialize combined chart for a BarChart and a LineChart combination
-        mChart = (CombinedChart) findViewById(R.id.lineChart);
+        CombinedChart mChart = findViewById(R.id.lineChart);
         // mChart.setHighlightFullBarEnabled(true);
         mChart.setDescription(null);
 
@@ -66,14 +60,6 @@ public class StatsActivity extends AppCompatActivity {
 
         // draw bars behind lines
         mChart.setDrawOrder(new CombinedChart.DrawOrder[] {CombinedChart.DrawOrder.BAR, CombinedChart.DrawOrder.LINE});
-
-        // Legend object gets
-        /*Legend l = mChart.getLegend();
-        l.setWordWrapEnabled(true);
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
-        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        */
 
         // Axis on both sides of the Graph
         YAxis rightAxis = mChart.getAxisRight();
@@ -84,20 +70,16 @@ public class StatsActivity extends AppCompatActivity {
         leftAxis.setDrawGridLines(false);
         leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 
+        CombinedData data = new CombinedData();
+        data.setData(generateLineData());
+        data.setData(generateBarData());
+
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.TOP);
         xAxis.setAxisMinimum(0f);
         xAxis.setGranularity(1f);
-
-
-        CombinedData data = new CombinedData();
-
-        data.setData(generateLineData());
-        data.setData(generateBarData());
-
-
         xAxis.setAxisMaximum(data.getXMax() + 0.25f);
-        // xAxis.setValueFormatter(new XAxisValueFormatter());
+
         mChart.setData(data);
         mChart.getLegend().setCustom( new LegendEntry[0]);
 
@@ -114,7 +96,7 @@ public class StatsActivity extends AppCompatActivity {
 
         LineData d = new LineData();
 
-        ArrayList<Entry> entries = new ArrayList<Entry>();
+        ArrayList<Entry> entries = new ArrayList<>();
         getSpeedLineEntries(getTrainingsKeys(), entries);
 
 
@@ -142,8 +124,8 @@ public class StatsActivity extends AppCompatActivity {
      */
     private BarData generateBarData() {
 
-        ArrayList<BarEntry> entries = new ArrayList<BarEntry>();
-       // entries = getBarEnteries(entries);
+        ArrayList<BarEntry> entries = new ArrayList<>();
+       // entries = getBarEntries(entries);
         getStepCountBarEntries(getTrainingsKeys(), entries);
 
 
@@ -156,7 +138,7 @@ public class StatsActivity extends AppCompatActivity {
 
 
 
-        float barWidth = 0.2f; // x2 dataset
+        float barWidth = 0.2f; // x2 data set
 
         BarData d = new BarData(set1);
         d.setBarWidth(barWidth);
@@ -169,7 +151,7 @@ public class StatsActivity extends AppCompatActivity {
      * @return ArrayList with all keys containing dates
      */
     private ArrayList<String> getTrainingsKeys(){
-        SharedPreferences pre = getSharedPreferences(TRAININGS, MODE_PRIVATE);
+        SharedPreferences pre = getSharedPreferences(TRAININGS_SHARED_PREFS, MODE_PRIVATE);
         Map<String,?> keys = pre.getAll();
         ArrayList<String> dates = new ArrayList<>();
 
@@ -185,8 +167,8 @@ public class StatsActivity extends AppCompatActivity {
      */
     private void getStepCountBarEntries(ArrayList<String> dates, ArrayList<BarEntry> barEntries){
         int counter = 1;
-        SharedPreferences pre = getSharedPreferences(TRAININGS, MODE_PRIVATE);
-        int stepCount = 0;
+        SharedPreferences pre = getSharedPreferences(TRAININGS_SHARED_PREFS, MODE_PRIVATE);
+        int stepCount;
         for (String date : dates) {
             HashSet<String> mySet = (HashSet<String>) pre.getStringSet(date, new HashSet<String>());
             for (String s: mySet) {
@@ -205,8 +187,8 @@ public class StatsActivity extends AppCompatActivity {
      */
     private void getSpeedLineEntries(ArrayList<String> dates, ArrayList<Entry> lineEntries) {
         int counter = 1;
-        SharedPreferences pre = getSharedPreferences(TRAININGS, MODE_PRIVATE);
-        float speed = 0;
+        SharedPreferences pre = getSharedPreferences(TRAININGS_SHARED_PREFS, MODE_PRIVATE);
+        float speed;
         for (String date : dates) {
             HashSet<String> mySet = (HashSet<String>) pre.getStringSet(date, new HashSet<String>());
             for (String s: mySet) {
@@ -223,9 +205,9 @@ public class StatsActivity extends AppCompatActivity {
     /**
      * check if there are trainings are recorded
      */
-    public void checkTrainingBeforeSet() {
+    private void checkTrainingBeforeSet() {
         if (getTrainingsKeys().size() == 0) {
-            view.setVisibility(View.VISIBLE);
+            noDataFoundTextView.setVisibility(View.VISIBLE);
         }
     }
 

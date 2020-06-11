@@ -1,39 +1,42 @@
 package net.ictcampus.piedometre;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
+/**
+ * <h3> Profile Activity </h3>
+ * It shows the last entered profile information of the user
+ *
+ * extends the AppCompatActivity and therefore overrides the methods of the Android lifecycle
+ *
+ * @author doriera & luetolfre
+ * @version 1.0
+ * @since 2020-06-11
+ */
 public class ProfileActivity extends AppCompatActivity {
-
-    /**
-     * the button to start editing information
-     */
-    FloatingActionButton edit;
 
 
     /**
      * variables are used to get values out of the edit dialog and stored in the SharedPreferences
      */
-    public static final String SHARED_PREFS = "profile";
-    public static final String NAME = "name";
-    public static final String WEIGHT = "weight";
-    public static final String STEPLENGTH = "steplength";
-    public static final String DAILYSTEPS = "dailysteps";
+    private static final String PROFILE_SHARED_PREFS = "profile";
+    private static final String NAME = "name";
+    private static final String WEIGHT = "weight";
+    private static final String STEP_LENGTH = "stepLength";
+    private static final String DAILY_STEPS = "dailySteps";
 
 
 
@@ -44,12 +47,12 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // get the TextViews from here
         setContentView(R.layout.activity_profile);
+        // get the TextViews from here
         updateTextView();
 
-        edit = findViewById(R.id.floatingActionButtonEdit);
+        // the button to start editing information
+        FloatingActionButton edit = findViewById(R.id.floatingActionButtonEdit);
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,13 +64,13 @@ public class ProfileActivity extends AppCompatActivity {
     /**
      * due to the onClick on the floating action button, the AlertDialog gets called to display the text input
      */
-    public void openEditDialog() {
+    private void openEditDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         // input fields
         final EditText inputName = new EditText(this);
         final EditText inputWeight = new EditText(this);
-        final EditText inputSteplength = new EditText(this);
+        final EditText inputStepLength = new EditText(this);
         final EditText inputDailySteps = new EditText(this);
 
 
@@ -77,14 +80,14 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
 
                 // puts the SharedPreferences profile onto the editor
-                SharedPreferences profile = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+                SharedPreferences profile = getSharedPreferences(PROFILE_SHARED_PREFS, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = profile.edit();
 
                 // read from the input and update the current information in the SharedPreferences profile
                 editor.putString(NAME, inputName.getText().toString());
                 editor.putString(WEIGHT, inputWeight.getText().toString());
-                editor.putString(STEPLENGTH, inputSteplength.getText().toString());
-                editor.putString(DAILYSTEPS, inputDailySteps.getText().toString());
+                editor.putString(STEP_LENGTH, inputStepLength.getText().toString());
+                editor.putString(DAILY_STEPS, inputDailySteps.getText().toString());
                 editor.apply();
 
                 // handle the stored information in method updateTextView to display them
@@ -107,7 +110,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         // instance to access SharedPreferences
-        SharedPreferences profile = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences profile = getSharedPreferences(PROFILE_SHARED_PREFS, Context.MODE_PRIVATE);
 
         // linear layout to set the inputs
         final LinearLayout inputs = new LinearLayout(this);
@@ -125,13 +128,13 @@ public class ProfileActivity extends AppCompatActivity {
         inputWeight.setHint("Weight in kg");
         inputs.addView(inputWeight);
 
-        inputSteplength.setInputType(InputType.TYPE_CLASS_NUMBER);
-        inputSteplength.setText(profile.getString(STEPLENGTH, "Steplength in cm"));
-        inputSteplength.setHint("Steplength in cm");
-        inputs.addView(inputSteplength);
+        inputStepLength.setInputType(InputType.TYPE_CLASS_NUMBER);
+        inputStepLength.setText(profile.getString(STEP_LENGTH, "Step length in cm"));
+        inputStepLength.setHint("Step length in cm");
+        inputs.addView(inputStepLength);
 
         inputDailySteps.setInputType(InputType.TYPE_CLASS_NUMBER);
-        inputDailySteps.setText(profile.getString(DAILYSTEPS, "Steps a Day"));
+        inputDailySteps.setText(profile.getString(DAILY_STEPS, "Steps a Day"));
         inputDailySteps.setHint("Steps a Day");
         inputs.addView(inputDailySteps);
 
@@ -142,26 +145,20 @@ public class ProfileActivity extends AppCompatActivity {
     /**
      * update is responsible for setting the new values from input into the activity_profile text views
      */
-    public void updateTextView() {
+    private void updateTextView() {
         // instance of SharedPreferences
-        SharedPreferences profile = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences profile = getSharedPreferences(PROFILE_SHARED_PREFS, Context.MODE_PRIVATE);
 
         // look for text views which should be updated
         TextView nameView = findViewById(R.id.textViewName);
         TextView weightView = findViewById(R.id.textViewWeight);
-        TextView steplengthView = findViewById(R.id.textViewStepLength);
+        TextView stepLengthView = findViewById(R.id.textViewStepLength);
         TextView dailyStepsView = findViewById(R.id.textViewDailySteps);
 
         // set the input values to the text view in activity_profile
         nameView.setText(profile.getString(NAME, "NAME"));
-        weightView.setText(profile.getString(WEIGHT, "WEIGHT"));
-        steplengthView.setText(profile.getString(STEPLENGTH, "STEPLENGTH"));
-        dailyStepsView.setText(profile.getString(DAILYSTEPS, "DAILYSTEPS"));
-    }
-
-    public int getDailySteps() {
-        SharedPreferences profile = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-        int dailySteps = Integer.getInteger(profile.getString(DAILYSTEPS, "100"));
-        return dailySteps;
+        weightView.setText(profile.getString(WEIGHT, "70"));
+        stepLengthView.setText(profile.getString(STEP_LENGTH, "70"));
+        dailyStepsView.setText(profile.getString(DAILY_STEPS, "2000"));
     }
 }

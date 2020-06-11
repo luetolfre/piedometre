@@ -7,10 +7,10 @@ import static org.junit.Assert.*;
 
 /**
  * in this class, the formatTime() method gets tested from the class TrainingActivity
- * it uses a Long value which is then formated and parsed to a String
+ * it uses a Long value which is then formatted and parsed to a String
  * in this case, one hour
  */
-public class TrainingActivityTest {
+public class TrainingActivityUnitTest {
 
     @Test
     public void formatTimeTest() {

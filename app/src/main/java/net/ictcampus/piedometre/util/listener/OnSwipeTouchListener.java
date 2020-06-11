@@ -1,5 +1,6 @@
 package net.ictcampus.piedometre.util.listener;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -11,23 +12,45 @@ import android.view.View.OnTouchListener;
  * <h3> On Swipe Touch Listener </h3>
  * represents a Listener for detecting swiping touches
  *
- * @author luetolfre
+ * @author doriera & luetolfre
  * @version 1.0
  * @since 2020-05-28
  */
 public class OnSwipeTouchListener implements OnTouchListener {
 
+    /**
+     * for detection of gestures
+     */
     private final GestureDetector gestureDetector;
 
-    public OnSwipeTouchListener (Context ctx){
-        gestureDetector = new GestureDetector(ctx, new GestureListener());
+    /**
+     * Initializes a new SwipeTouch Listener
+     * @param context where the listener is set in
+     */
+    public OnSwipeTouchListener (Context context){
+        gestureDetector = new GestureDetector(context, new GestureListener());
     }
 
+    /**
+     * Listens for touches on the specified view
+     * @param view that is being touched
+     * @param event of a motion
+     * @return boolean it it was just a touch
+     */
+    @SuppressLint("ClickableViewAccessibility")
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
+    public boolean onTouch(View view, MotionEvent event) {
         return gestureDetector.onTouchEvent(event);
     }
 
+    /**
+     * <h5> Gesture Listener </h5>
+     * represents a Listener for detecting simple gestures
+     *
+     * @author doriera & luetolfre
+     * @version 1.0
+     * @since 2020-05-28
+     */
     private final class GestureListener extends SimpleOnGestureListener {
 
         private static final int SWIPE_THRESHOLD = 100;
@@ -55,11 +78,6 @@ public class OnSwipeTouchListener implements OnTouchListener {
                     }
                 }
                 else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
-                    if (diffY > 0) {
-                        onSwipeBottom();
-                    } else {
-                        onSwipeTop();
-                    }
                     result = true;
                 }
             } catch (Exception exception) {
@@ -69,15 +87,9 @@ public class OnSwipeTouchListener implements OnTouchListener {
         }
     }
 
-    public void onSwipeRight() {
+    protected void onSwipeRight() {
     }
 
-    public void onSwipeLeft() {
-    }
-
-    public void onSwipeTop() {
-    }
-
-    public void onSwipeBottom() {
+    protected void onSwipeLeft() {
     }
 }

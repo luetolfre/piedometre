@@ -9,16 +9,9 @@
     <string name="time">Time</string>
     <string name="km_h">km/h</string>
     <string name="start_time_00">00:00:00</string>
-    <string name="start_time_format">%d:%02d:%03d</string>
     <string name="start_speed_0">0.0</string>
     <string name="title_activity_profile">profile</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="training_type_running">running</string>
     <string name="training_type_cycling">cycling</string>
     <string name="training_type_hiking">hiking</string>
@@ -31,13 +24,23 @@
     <string name="FirstEditDialogMessage">Enter valid information. We trust you´ll be happy, sir! </string>
     <string name="your_profile">Your Profile</string>
     <string name="weight">Weight:</string>
-    <string name="step_lenght">Step lenght:</string>
+    <string name="step_length">Step length:</string>
     <string name="daily_steps">Daily Steps:</string>
     <string name="name">"Name: "</string>
     <string name="input_weight">WEIGHT</string>
     <string name="input_name">NAME</string>
-    <string name="input_steplenght">LENGTH</string>
-    <string name="input_dailysteps">DAILYSTEPS</string>
+    <string name="input_step_length">LENGTH</string>
+    <string name="input_daily_steps">DAILY STEPS</string>
     <string name="no_trainings">Unfortunately no Trainings recorded yet</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+    <string name="zero_number">0</string>
+    <string name="profile">Profile</string>
+    <string name="profile_icon">profile_icon</string>
+    <string name="piedometre_icon">piedometre_icon</string>
+    <string name="stats_icon">stats_icon</string>
+    <string name="piedometre">PiedoMètre</string>
+    <string name="edit">Edit</string>
+    <string name="trends">Trends</string>
 
 </resources>

@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.615" />
 
-    <TextView android:id="@+id/textViewTrainingTypeDescription"
+    <TextView
         android:layout_width="59dp"
         android:layout_height="26dp"
         android:text="@string/type"
@@ -64,7 +64,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.12" />
 
-    <TextView android:id="@+id/textViewTrainingSpeedDescription"
+    <TextView
         android:layout_width="59dp"
         android:layout_height="26dp"
         android:text="@string/speed"
@@ -88,7 +88,7 @@
         app:layout_constraintStart_toStartOf="@+id/progressBarTrainingSpeed"
         app:layout_constraintTop_toTopOf="@+id/progressBarTrainingSpeed" />
 
-    <TextView android:id="@+id/textViewMeasuringUnitSpeedDescription"
+    <TextView
         android:layout_width="59dp"
         android:layout_height="26dp"
         android:text="@string/km_h"
@@ -118,7 +118,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.416" />
 
-    <TextView android:id="@+id/textViewTrainingTimeDescription"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/time"

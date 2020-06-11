@@ -14,7 +14,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -24,65 +23,164 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import static net.ictcampus.piedometre.ProfileActivity.DAILYSTEPS;
-
-
 /**
- * Main activity starts the screen with four tiles which is eighter a button or provides informations
+ * <h3> Main Activity </h3>
+ * Main activity represents the start screen. It shows four circles, one of them is shows the steps.
+ * The other 3 Circles are Buttons which lead to other activities
  *
- * @author luetolfre
+ * extends the AppCompatActivity and therefore overrides the methods of the Android lifecycle
+ * implements the SensorEventListener and therefore overrides the Sensor Changed methods
+ *
+ * @author doriera & luetolfre
  * @version 1.0
  * @since 2020-06-11
  */
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
-    SensorManager mSensorManager;
-    Sensor myStepSensor;
-    TextView textViewSteps;
-    ProgressBar progressBarSteps;
+    /**
+     * Constant name of the profile shared preferences
+     */
+    private static final String PROFILE_SHARED_PREFS = "profile";
+    /**
+     * Constant name for the username entry
+     */
+    private static final String NAME = "name";
+    /**
+     * Constant name for the weight entry
+     */
+    private static final String WEIGHT = "weight";
+    /**
+     * Constant name for the stepLength entry
+     */
+    private static final String STEP_LENGTH = "stepLength";
+    /**
+     * Constant name for the daily steps
+     */
+    private static final String DAILY_STEPS = "dailySteps";
+    /**
+     * The Manager which is used to gain access to the sensors
+     */
+    private SensorManager mSensorManager;
+    /**
+     * Sensor TYPE_STEP_COUNTER
+     * Constant Value: 19 (0x00000013)
+     */
+    private Sensor myStepSensor;
+    /**
+     * TextView that is constantly updated with the taken steps
+     */
+    private TextView textViewSteps;
+    /**
+     * Circular ProgressBar that is constantly updated with the taken steps
+     */
+    private ProgressBar progressBarSteps;
+
 
     /**
-     * Variables to the Shared Preferences
+     * The onCreate Method initializes the static class Variables
+     * @param savedInstanceState Bundle of saved Instances
      */
-    public static final String SHARED_PREFS = "profile";
-    public static final String NAME = "name";
-    public static final String WEIGHT = "weight";
-    public static final String STEPLENGTH = "steplength";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
+        // inserts a switch to change between dark and light mode
         switchListenerDarkLightMode();
 
-
-
-        // first off, check if its a fresh install of the App
-        boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
-        if (isFirstRun) {
-            //shows the information dialog
-            openEditDialog();
-        }
-
-
+        // find Views that will have to be updated
         textViewSteps = findViewById(R.id.textViewCount);
         progressBarSteps = findViewById(R.id.progressbarSteps);
-
-
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        assert mSensorManager != null;
-        myStepSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-
-
-        if (myStepSensor != null) {
-            mSensorManager.registerListener(this, myStepSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        }
 
         updateProgressBar(0);
     }
 
+    /**
+     * The onResume Method is called after pausing the App or while starting the App after onCreate & onStart
+     * It checks for it being the first run, and opens the window to enter profile information
+     * It looks for the Sensor manager, the Sensor and registers a listener if it is available
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        // first off, check if its a fresh install of the App
+        boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
+        if (isFirstRun){// || profile.getString(WEIGHT, "10").equals("WEIGHT")) {
+            //shows the information dialog
+            openEditDialog();
+        }
+        // initialize the Sensor Manager & give Feedback if the app is not usable
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        if (mSensorManager != null){
+            myStepSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+            if (myStepSensor != null) {
+                mSensorManager.registerListener(this, myStepSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            } else {
+                Toast.makeText(getApplicationContext(), "You don't have a Step Counter Sensor!",  Toast.LENGTH_LONG).show();
+            }
+        }else {
+            Toast.makeText(getApplicationContext(), "You don't have a Sensor Manager!",  Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    /**
+     * The onPause Method unregisters the listener to save power while the app is not active
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // take off the Listener of the Sensor (Sensor is counting by itself in the BG)
+        mSensorManager.unregisterListener(this, myStepSensor);
+    }
+
+    /**
+     * Start of Training Activity
+     * @param view of the TrainingButton
+     */
+    @SuppressWarnings("unused")
+    public void startTrainingActivity(View view) {
+        Intent training = new Intent(getApplicationContext(), TrainingActivity.class);
+        startActivity(training);
+    }
+
+    /**
+     * Start of Stats Activity
+     * @param view of the StatsButton
+     */
+    @SuppressWarnings("unused")
+    public void startStatsActivity(View view) {
+        Intent stats = new Intent(getApplicationContext(), StatsActivity.class);
+        startActivity(stats);
+    }
+
+    /**
+     * Start the ProfileActivity
+     * @param view of the ProfileButton
+     */
+    @SuppressWarnings("unused")
+    public void startProfileActivity(View view) {
+        Intent profile = new Intent(getApplicationContext(), ProfileActivity.class);
+        startActivity(profile);
+    }
+
+    /**
+     * method updates the textViewSteps and the progressBar in the Main Activity by accessing the SensorEventListener event
+     * @param event that the sensor has changed
+     */
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        updateProgressBar((int) event.values[0]);
+        textViewSteps.setText(String.valueOf((int) event.values[0]));
+    }
+
+    /**
+     * Method is called whenever the accuracy of the STEP_COUNTER changes
+     * @param sensor STEP_COUNTER_SENSOR
+     * @param accuracy int
+     */
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
 
     /**
      * Add Listener to the SwitchButton to change Dark/Light Mode
@@ -100,121 +198,34 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         });
     }
 
-
     /**
-     * Start of Trainig Activity
-     *
-     * @param view of the TrainingButton
-     */
-    public void startTrainingActivity(View view) {
-        Intent training = new Intent(getApplicationContext(), TrainingActivity.class);
-        startActivity(training);
-    }
-
-    /**
-     * Start of Stats Activity
-     *
-     * @param view of the StatsButton
-     */
-    public void startStatsActivity(View view) {
-        Intent stats = new Intent(getApplicationContext(), StatsActivity.class);
-        Toast.makeText(getApplicationContext(), "stats", Toast.LENGTH_SHORT).show();
-        startActivity(stats);
-    }
-
-    /**
-     * Start the ProfileActivity
-     *
-     * @param view of the ProfileButton
-     */
-    public void startProfileActivity(View view) {
-        Intent profile = new Intent(getApplicationContext(), ProfileActivity.class);
-        Toast.makeText(getApplicationContext(), "Profile", Toast.LENGTH_SHORT).show();
-        startActivity(profile);
-
-    }
-
-    /**
-     * method updates the textViewSteps and the progressBar in the Main Activity by accessing the SensorEventListener event
-     * @param event
-     */
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        //System.out.println(event.values[0]);
-        Log.v("sensor", String.valueOf((int) event.values[0]));
-        updateProgressBar((int) event.values[0]);
-        textViewSteps.setText(String.valueOf((int) event.values[0]));
-    }
-
-    /**
-     * Method is called whenever the accuracy of the STEP_COUNTER changes
-     * @param sensor Sensor
-     * @param accuracy int
-     */
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
-
-
-    /**
-     * onPause when leaving the App but not closing
-     */
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // take off the Listener of the Sensor (while Sensor is counting by itself in the BG, powersaving reasons)
-        mSensorManager.unregisterListener(this, myStepSensor);
-    }
-
-    /**
-     * onResume is called after pausing the App or while starting the App after onCreate & onStart
-     */
-    @Override
-    public void onResume() {
-        super.onResume();
-        mSensorManager.registerListener(this, myStepSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        // first off, check if its a fresh install of the App
-        boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
-        SharedPreferences profile = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-
-        if (isFirstRun || profile.getString(WEIGHT, "10").equals("WEIGHT")) {
-            //shows the information dialog
-            openEditDialog();
-        }
-    }
-
-
-    /**
-     * Method updates the progressBar in .xml for more visual information
+     * Method updates the progressBar in .xml for more visual information on steps taken
      * @param stepProgress int value of steps counted
      */
-    public void updateProgressBar(int stepProgress) {
+    private void updateProgressBar(int stepProgress) {
         // access the shared preferences to check the dailySteps goal
-        SharedPreferences profile = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences profile = getSharedPreferences(PROFILE_SHARED_PREFS, Context.MODE_PRIVATE);
 
-        int dailySteps = Integer.parseInt(profile.getString(DAILYSTEPS, "10"));
+        int dailySteps = Integer.parseInt(profile.getString(DAILY_STEPS, "10"));
         // the progress in percents
-        int progInPerc = (stepProgress * 100 / dailySteps);
-        if (progInPerc > 100) {
+        int progressInPercent = (stepProgress * 100 / dailySteps);
+        if (progressInPercent > 100) {
             progressBarSteps.setProgress(100);
         }
-        else if (progInPerc < 20) {
-            progressBarSteps.setProgress(20);
-        }
-        else {
-            progressBarSteps.setProgress(progInPerc);
-        }
+        else progressBarSteps.setProgress(Math.max(progressInPercent, 20));
     }
 
     /**
+     * Initializes an Alert Dialog to input profile information
      * due to the onClick on the floating action button, the AlertDialog gets called to display the text input
      */
-    public void openEditDialog() {
+    private void openEditDialog() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         // input fields
         final EditText inputName = new EditText(this);
         final EditText inputWeight = new EditText(this);
-        final EditText inputSteplength = new EditText(this);
+        final EditText inputStepLength = new EditText(this);
         final EditText inputDailySteps = new EditText(this);
 
         // Set up the buttons (and a title), on Cancel dismiss()
@@ -223,13 +234,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public void onClick(DialogInterface dialog, int which) {
 
                 // puts the SharedPreferences profile onto the editor
-                SharedPreferences profile = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+                SharedPreferences profile = getSharedPreferences(PROFILE_SHARED_PREFS, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = profile.edit();
 
                 // read from the input and check on valid information
                 if (inputName.getText().toString().length() < 2 ||
                         (inputWeight.getText().toString().length() < 2 ||
-                        inputSteplength.getText().toString().length() < 2 ||
+                        inputStepLength.getText().toString().length() < 2 ||
                         inputDailySteps.getText().toString().length() < 2 )) {
 
                     // builder.setCancelable(false);
@@ -240,10 +251,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     // update the current information in the SharedPreferences profile
                     editor.putString(NAME, inputName.getText().toString());
                     editor.putString(WEIGHT, inputWeight.getText().toString());
-                    editor.putString(STEPLENGTH, inputSteplength.getText().toString());
-                    editor.putString(DAILYSTEPS, inputDailySteps.getText().toString());
+                    editor.putString(STEP_LENGTH, inputStepLength.getText().toString());
+                    editor.putString(DAILY_STEPS, inputDailySteps.getText().toString());
                     editor.apply();
-                    getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstRun", false).commit();
+                    getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstRun", false).apply();
 
                     // with updated activity_profile, the dialog can get closed
                     dialog.cancel();
@@ -252,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         });
 
         // instance to access SharedPreferences
-        SharedPreferences profile = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences profile = getSharedPreferences(PROFILE_SHARED_PREFS, Context.MODE_PRIVATE);
 
         // linear layout to set the inputs
         final LinearLayout inputs = new LinearLayout(this);
@@ -267,12 +278,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         inputWeight.setHint(profile.getString(WEIGHT, "Weight in kg"));
         inputs.addView(inputWeight);
 
-        inputSteplength.setInputType(InputType.TYPE_CLASS_NUMBER);
-        inputSteplength.setHint(profile.getString(STEPLENGTH, "Steplength in cm"));
-        inputs.addView(inputSteplength);
+        inputStepLength.setInputType(InputType.TYPE_CLASS_NUMBER);
+        inputStepLength.setHint(profile.getString(STEP_LENGTH, "Step length in cm"));
+        inputs.addView(inputStepLength);
 
         inputDailySteps.setInputType(InputType.TYPE_CLASS_NUMBER);
-        inputDailySteps.setHint(profile.getString(DAILYSTEPS, "Steps a Day Goal"));
+        inputDailySteps.setHint(profile.getString(DAILY_STEPS, "Steps a Day Goal"));
         inputs.addView(inputDailySteps);
 
         builder.setView(inputs);
