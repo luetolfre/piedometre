@@ -27,7 +27,8 @@
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="EditDialogTitle">Edit your information</string>
-    <string name="FirstEditDialogTitle">Welcome to piedometre! Please enter valid information for more accurate results. We trust you´ll be happy, sir!</string>
+    <string name="FirstEditDialogTitle">Welcome to PiedoMètre! </string>
+    <string name="FirstEditDialogMessage">Enter valid information. We trust you´ll be happy, sir! </string>
     <string name="your_profile">Your Profile</string>
     <string name="weight">Weight:</string>
     <string name="step_lenght">Step lenght:</string>

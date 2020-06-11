@@ -24,6 +24,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import static net.ictcampus.piedometre.ProfileActivity.DAILYSTEPS;
 
 
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             //shows the information dialog
             openEditDialog();
         }
-        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstRun", false).commit();
+
 
         textViewSteps = findViewById(R.id.textViewCount);
         progressBarSteps = findViewById(R.id.progressbarSteps);
@@ -170,6 +171,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onResume() {
         super.onResume();
+        mSensorManager.registerListener(this, myStepSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        // first off, check if its a fresh install of the App
+        boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
+        SharedPreferences profile = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+
+        if (isFirstRun || profile.getString(WEIGHT, "10").equals("WEIGHT")) {
+            //shows the information dialog
+            openEditDialog();
+        }
     }
 
 
@@ -207,9 +217,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         final EditText inputSteplength = new EditText(this);
         final EditText inputDailySteps = new EditText(this);
 
-
         // Set up the buttons (and a title), on Cancel dismiss()
-        builder.setTitle(R.string.FirstEditDialogTitle).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.FirstEditDialogTitle).setMessage(R.string.FirstEditDialogMessage).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -219,13 +228,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                 // read from the input and check on valid information
                 if (inputName.getText().toString().length() < 2 ||
-                        inputWeight.getText().toString().length() < 2 ||
+                        (inputWeight.getText().toString().length() < 2 ||
                         inputSteplength.getText().toString().length() < 2 ||
-                        inputDailySteps.getText().toString().length() < 2) {
+                        inputDailySteps.getText().toString().length() < 2 )) {
 
                     // builder.setCancelable(false);
                     Toast.makeText(MainActivity.this, "Enter valid information", Toast.LENGTH_LONG).show();
                     openEditDialog();
+
                 } else {
                     // update the current information in the SharedPreferences profile
                     editor.putString(NAME, inputName.getText().toString());
@@ -233,6 +243,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     editor.putString(STEPLENGTH, inputSteplength.getText().toString());
                     editor.putString(DAILYSTEPS, inputDailySteps.getText().toString());
                     editor.apply();
+                    getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstRun", false).commit();
 
                     // with updated activity_profile, the dialog can get closed
                     dialog.cancel();
