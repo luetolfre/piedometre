@@ -237,6 +237,7 @@ public class TrainingActivity extends AppCompatActivity {
      */
     private void updateSpeed(double speed){
         trainingSpeed.setText(String.format(Locale.getDefault(),"%.3f",speed*36));
+        Log.v("speed", String.format("%.3f",speed*36));
     }
 
     /**
