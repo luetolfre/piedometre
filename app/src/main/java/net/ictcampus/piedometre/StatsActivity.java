@@ -11,6 +11,7 @@ import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.LegendEntry;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -21,6 +22,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -43,6 +45,7 @@ public class StatsActivity extends AppCompatActivity {
         // initialize combined chart for a BarChart and a LineChart combination
         mChart = (CombinedChart) findViewById(R.id.lineChart);
         mChart.setHighlightFullBarEnabled(true);
+        mChart.setDescription(null);
 
         // methods that calibrate the mChart so that the Axis, Lines and Columns are correctly shown up
 
@@ -67,7 +70,7 @@ public class StatsActivity extends AppCompatActivity {
         leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 
         XAxis xAxis = mChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTH_SIDED);
+        xAxis.setPosition(XAxis.XAxisPosition.TOP);
         xAxis.setAxisMinimum(0f);
         xAxis.setGranularity(1f);
 
@@ -78,7 +81,10 @@ public class StatsActivity extends AppCompatActivity {
         data.setData(generateBarData());
 
         xAxis.setAxisMaximum(data.getXMax() + 0.25f);
+        // xAxis.setValueFormatter(new XAxisValueFormatter());
         mChart.setData(data);
+        mChart.getLegend().setCustom( new LegendEntry[0]);
+
         mChart.invalidate();
     }
 
@@ -109,7 +115,7 @@ public class StatsActivity extends AppCompatActivity {
         set.setValueTextSize(10f);
         set.setValueTextColor(Color.rgb(240, 238, 70));
 
-        set.setAxisDependency(YAxis.AxisDependency.LEFT);
+        set.setAxisDependency(YAxis.AxisDependency.RIGHT);
         d.addDataSet(set);
 
         return d;
@@ -121,12 +127,15 @@ public class StatsActivity extends AppCompatActivity {
        // entries = getBarEnteries(entries);
         getStepCountBarEntries(getTrainingsKeys(), entries);
 
-        BarDataSet set1 = new BarDataSet(entries, "Bar");
+
+        BarDataSet set1 = new BarDataSet(entries, null);
         //set1.setColor(Color.rgb(60, 220, 78));
         set1.setColors(ColorTemplate.COLORFUL_COLORS);
         set1.setValueTextColor(Color.rgb(60, 220, 78));
         set1.setValueTextSize(10f);
         set1.setAxisDependency(YAxis.AxisDependency.LEFT);
+
+
 
         float barWidth = 0.2f; // x2 dataset
 
