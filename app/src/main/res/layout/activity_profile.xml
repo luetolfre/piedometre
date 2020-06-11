@@ -46,10 +46,10 @@
         app:layout_constraintTop_toTopOf="@+id/floatingActionButtonEdit" />
 
     <LinearLayout
-        android:layout_width="364dp"
+        android:layout_width="351dp"
         android:layout_height="144dp"
-        android:orientation="horizontal"
         android:gravity="center_horizontal"
+        android:orientation="horizontal"
         android:weightSum="2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -61,9 +61,9 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center_vertical"
             android:orientation="vertical"
-            android:layout_weight="1"
             android:weightSum="5"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="214dp">
@@ -72,49 +72,45 @@
                 android:id="@+id/textViewNameDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/name"
-                android:textSize="20sp"
                 android:layout_weight="1"
-                />
+                android:text="@string/name"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/textViewWeightDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@string/weight"
                 android:textAlignment="textEnd"
-                android:layout_weight="1"
-                android:textSize="20sp"
-                />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/textViewStepLengthDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@string/step_lenght"
                 android:textAlignment="textEnd"
-                android:textSize="20sp"
-                android:layout_weight="1"
-               />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/textViewDailyStepsDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@string/daily_steps"
                 android:textAlignment="textEnd"
-                android:textSize="20sp"
-                android:layout_weight="1"
-                />
+                android:textSize="20sp" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center_horizontal|end|center"
             android:orientation="vertical"
-            android:layout_weight="1"
             android:weightSum="5"
             tools:layout_editor_absoluteX="290dp"
             tools:layout_editor_absoluteY="193dp"
@@ -125,38 +121,34 @@
                 android:id="@+id/textViewName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@string/input_name"
                 android:textAlignment="textEnd"
-                android:textSize="20sp"
-                android:layout_weight="1"
-                />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/textViewWeight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/input_weight"
-                android:textSize="20sp"
                 android:layout_weight="1"
-                 />
+                android:text="@string/input_weight"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/textViewStepLength"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/input_steplenght"
-                android:textSize="20sp"
                 android:layout_weight="1"
-                />
+                android:text="@string/input_steplenght"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/textViewDailySteps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/input_dailysteps"
-                android:textSize="20sp"
                 android:layout_weight="1"
-                />
+                android:text="@string/input_dailysteps"
+                android:textSize="20sp" />
 
         </LinearLayout>
     </LinearLayout>
