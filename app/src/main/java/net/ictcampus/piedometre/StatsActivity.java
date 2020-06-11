@@ -10,6 +10,7 @@ import android.os.Bundle;
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -76,6 +77,8 @@ public class StatsActivity extends AppCompatActivity {
 
         data.setData(generateLineData());
         data.setData(generateBarData());
+
+        checkTrainingBeforeSet();
 
         xAxis.setAxisMaximum(data.getXMax() + 0.25f);
         mChart.setData(data);
@@ -185,6 +188,17 @@ public class StatsActivity extends AppCompatActivity {
                     counter ++;
                 }
             }
+        }
+    }
+
+    public void checkTrainingBeforeSet() {
+        if (getTrainingsKeys().size() == 0) {
+            Description des = mChart.getDescription();
+            des.setEnabled(true);
+            des.setText("Unfortunately no Trainings recorded yet");
+            des.setPosition(770, 200);
+            des.setTextSize(13);
+            mChart.setDescription(des);
         }
     }
 
